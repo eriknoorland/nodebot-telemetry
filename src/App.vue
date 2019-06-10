@@ -1,29 +1,73 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    <header class="header">
+      <navBar />
+
+      <div class="header__modules">
+        <header-module>
+          <div class="header__logo">
+            Alan
+          </div>
+        </header-module>
+
+        <!-- <header-module>
+          <battery />
+        </header-module> -->
+
+        <header-module>
+          <FPS />
+        </header-module>
+
+        <header-module modifiers="header__module--controls">
+          <controls />
+        </header-module>
+      </div>
+    </header>
+
+    <router-view />
   </div>
 </template>
 
+<script>
+import NavBar from '@/components/header/NavBar.vue';
+import HeaderModule from '@/components/header/Module.vue';
+// import Battery from '@/components/header/modules/Battery.vue';
+import FPS from '@/components/header/modules/FPS.vue';
+import Controls from '@/components/header/modules/Controls.vue';
+
+export default {
+  name: 'App',
+
+  components: {
+    NavBar,
+    HeaderModule,
+    // Battery,
+    FPS,
+    Controls,
+  },
+};
+</script>
+
 <style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+@import "./scss/base.scss";
+
+.header__modules {
+  display: flex;
+  padding: 10px;
+  height: auto;
+  background: #fff;
+  align-items: center;
+  flex-wrap: wrap;
+
+  @media(min-width: 768px) {
+    padding: 10px 20px;
+    height: 50px;
   }
+}
+
+.header__logo {
+  font-size: 15px;
+  font-weight: bold;
+  color: #303030;
 }
 </style>
