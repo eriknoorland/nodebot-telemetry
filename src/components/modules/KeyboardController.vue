@@ -43,26 +43,43 @@ export default {
       switch (keyCode) {
         case 32: // spacebar
           this.space = type === 'keydown';
-          this.$socket.emit('remote.stop');
+
+          if (type === 'keyup') {
+            this.$socket.emit('remote.stop');
+          }
           break;
         case 66: // b
-          this.$socket.emit('remote.beep');
+          if (type === 'keyup') {
+            this.$socket.emit('remote.beep');
+          }
           break;
         case 38: // arrow up
           this.up = type === 'keydown';
-          this.$socket.emit('remote.forward');
+
+          if (type === 'keyup') {
+            this.$socket.emit('remote.forward');
+          }
           break;
         case 40: // arrow down
           this.down = type === 'keydown';
-          this.$socket.emit('remote.reverse');
+
+          if (type === 'keyup') {
+            this.$socket.emit('remote.reverse');
+          }
           break;
         case 37: // arrow left
           this.left = type === 'keydown';
-          this.$socket.emit('remote.rotateLeft');
+
+          if (type === 'keyup') {
+            this.$socket.emit('remote.rotateLeft');
+          }
           break;
         case 39: // arrow right
           this.right = type === 'keydown';
-          this.$socket.emit('remote.rotateRight');
+
+          if (type === 'keyup') {
+            this.$socket.emit('remote.rotateRight');
+          }
           break;
         // no default
       }

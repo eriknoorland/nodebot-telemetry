@@ -8,9 +8,9 @@
       <lidar />
     </module>
 
-    <!-- <module>
+    <module>
       <keyboard-controller />
-    </module> -->
+    </module>
   </div>
 </template>
 
@@ -18,7 +18,7 @@
 import Module from '@/components/Module.vue';
 import Log from '@/components/modules/Log.vue';
 import Lidar from '@/components/modules/Lidar.vue';
-// import KeyboardController from '@/components/modules/KeyboardController.vue';
+import KeyboardController from '@/components/modules/KeyboardController.vue';
 
 export default {
   name: 'Dashboard',
@@ -27,7 +27,7 @@ export default {
     Module,
     Log,
     Lidar,
-    // KeyboardController,
+    KeyboardController,
   },
 };
 </script>
