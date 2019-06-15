@@ -9,6 +9,10 @@
     </module>
 
     <module>
+      <camera />
+    </module>
+
+    <module>
       <keyboard-controller />
     </module>
   </div>
@@ -18,6 +22,7 @@
 import Module from '@/components/Module.vue';
 import Log from '@/components/modules/Log.vue';
 import Lidar from '@/components/modules/Lidar.vue';
+import Camera from '@/components/modules/Camera.vue';
 import KeyboardController from '@/components/modules/KeyboardController.vue';
 
 export default {
@@ -27,6 +32,7 @@ export default {
     Module,
     Log,
     Lidar,
+    Camera,
     KeyboardController,
   },
 };

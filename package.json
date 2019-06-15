@@ -37,7 +37,14 @@
       "plugin:vue/essential",
       "@vue/airbnb"
     ],
-    "rules": {},
+    "rules": {
+      "object-curly-newline": [
+        "error", {
+          "ObjectExpression": "always",
+          "ObjectPattern": {"multiline": false}
+        }
+      ]
+    },
     "parserOptions": {
       "parser": "babel-eslint"
     }
