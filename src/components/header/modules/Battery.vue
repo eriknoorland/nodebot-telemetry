@@ -19,8 +19,8 @@ export default {
 
   data() {
     return {
-      minVoltage: 3.2,
-      maxVoltage: 4.2,
+      minVoltage: 3 * 4,
+      maxVoltage: 4.2 * 4,
       percentage: 0,
       isBatteryLow: false,
     };

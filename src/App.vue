@@ -10,9 +10,9 @@
           </div>
         </header-module>
 
-        <!-- <header-module>
+        <header-module>
           <battery />
-        </header-module> -->
+        </header-module>
 
         <header-module>
           <FPS />
@@ -31,7 +31,7 @@
 <script>
 import NavBar from '@/components/header/NavBar.vue';
 import HeaderModule from '@/components/header/Module.vue';
-// import Battery from '@/components/header/modules/Battery.vue';
+import Battery from '@/components/header/modules/Battery.vue';
 import FPS from '@/components/header/modules/FPS.vue';
 import Controls from '@/components/header/modules/Controls.vue';
 
@@ -41,7 +41,7 @@ export default {
   components: {
     NavBar,
     HeaderModule,
-    // Battery,
+    Battery,
     FPS,
     Controls,
   },

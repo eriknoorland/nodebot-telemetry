@@ -1,6 +1,9 @@
 <template>
   <div class="camera">
-    <canvas ref="canvas" class="camera__canvas"></canvas>
+    <canvas
+      ref="canvas"
+      class="camera__canvas"
+    ></canvas>
   </div>
 </template>
 
@@ -24,7 +27,7 @@ export default {
 
   sockets: {
     data({ camera }) {
-      const { code, frameWidth, frameHeight, x0, y0, x1, y1 } = this.camera;
+      const { code, frameWidth, frameHeight, x0, y0, x1, y1 } = camera;
 
       if (code === 200) {
         this.frameWidth = frameWidth;
