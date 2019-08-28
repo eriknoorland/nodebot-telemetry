@@ -9,7 +9,7 @@
       ></div>
     </div>
 
-    <span>{{ percentage }}%</span>
+    <span>{{ percentage }}% / {{ voltage }}V</span>
   </div>
 </template>
 
@@ -19,20 +19,27 @@ export default {
 
   data() {
     return {
-      minVoltage: 3 * 4,
-      maxVoltage: 4.2 * 4,
-      percentage: 0,
-      isBatteryLow: false,
+      min: 3.2 * 4, // 4S battery
+      max: 4.2 * 4, // 4S battery
+      voltage: 0,
     };
+  },
+
+  computed: {
+    percentage() {
+      return Math.floor(((this.voltage - this.min) * 100) / (this.max - this.min));
+    },
+
+    isBatteryLow() {
+      return this.voltage <= this.min;
+    },
   },
 
   sockets: {
     data({ battery }) {
       const { voltage } = battery;
 
-      // eslint-disable-next-line
-      this.percentage = Math.floor(((voltage - this.minVoltage) * 100) / (this.maxVoltage - this.minVoltage));
-      this.isBatteryLow = voltage <= this.minVoltage;
+      this.voltage = voltage;
     },
   },
 };
