@@ -9,7 +9,7 @@
       ></div>
     </div>
 
-    <span>{{ percentage }}% / {{ voltage }}V</span>
+    <span>{{ percentage }}% / {{ voltage | decimalize }}V</span>
   </div>
 </template>
 
@@ -32,6 +32,12 @@ export default {
 
     isBatteryLow() {
       return this.voltage <= this.min;
+    },
+  },
+
+  filters: {
+    decimalize(value) {
+      return value.toFixed(2);
     },
   },
 

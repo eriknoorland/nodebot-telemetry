@@ -5,7 +5,7 @@
       <option value="0">Remote</option>
       <option value="1">Back and forth</option>
       <!-- <option value="2">Back and forth slalom</option> -->
-      <!-- <option value="3">Back and forth super slalom</option> -->
+      <option value="3">Back and forth super slalom</option>
       <option value="4">Linefollower</option>
       <!-- <option value="5">Linefollower obstacle</option> -->
       <option value="6">T-time</option>
