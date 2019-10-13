@@ -45,7 +45,7 @@ export default {
   border: 0;
   color: #fff;
   font-family: Monaco;
-  font-size: 11px;
+  font-size: 9px;
   overflow: hidden;
   overflow-y: scroll;
 
