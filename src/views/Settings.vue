@@ -128,8 +128,6 @@
 import http from '@/http';
 
 export default {
-  name: 'Settings',
-
   data() {
     return {
       settings: {

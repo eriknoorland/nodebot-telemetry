@@ -1,17 +1,17 @@
 <template>
   <div class="controls">
     <select class="controls__select" v-model="state">
-      <option disabled value="">Select state</option>
-      <option value="0">Remote</option>
-      <option value="1">Back and forth</option>
-      <option value="2">Slalom</option>
-      <option value="3">Super slalom</option>
-      <option value="4">Line following</option>
-      <option value="5">Line following + obstacle</option>
-      <option value="6">T-time</option>
-      <option value="7">T-time bonus</option>
-      <option value="8">Cans</option>
-      <option value="9">Cans pickup and return</option>
+      <option disabled value="">
+        Select state
+      </option>
+
+      <option
+        v-for="(state, index) in states"
+        v-bind:key="index"
+        v-bind:value="index"
+      >
+        {{ state.name }}
+      </option>
     </select>
 
     <div class="controls__buttons">
@@ -41,12 +41,17 @@
 
 <script>
 export default {
-  name: 'Controls',
-
   data() {
     return {
+      states: [],
       state: '',
     };
+  },
+
+  sockets: {
+    setup({ states }) {
+      this.states = states;
+    },
   },
 
   methods: {
@@ -65,6 +70,65 @@ export default {
     onShutdownClick() {
       this.$socket.emit('shutdown');
     },
+
+    onKey(event) {
+      const { type, keyCode } = event;
+
+      switch (keyCode) {
+        case 32: // spacebar
+          event.preventDefault();
+          this.space = type === 'keydown';
+
+          if (type === 'keyup') {
+            this.$socket.emit('remote.stop');
+          }
+          break;
+        case 66: // b
+          event.preventDefault();
+          if (type === 'keyup') {
+            this.$socket.emit('remote.beep');
+          }
+          break;
+        case 38: // arrow up
+          event.preventDefault();
+          this.up = type === 'keydown';
+
+          if (type === 'keyup') {
+            this.$socket.emit('remote.forward');
+          }
+          break;
+        case 40: // arrow down
+          event.preventDefault();
+          this.down = type === 'keydown';
+
+          if (type === 'keyup') {
+            this.$socket.emit('remote.reverse');
+          }
+          break;
+        case 37: // arrow left
+          event.preventDefault();
+          this.left = type === 'keydown';
+
+          if (type === 'keyup') {
+            this.$socket.emit('remote.rotateLeft');
+          }
+          break;
+        case 39: // arrow right
+          event.preventDefault();
+          this.right = type === 'keydown';
+
+          if (type === 'keyup') {
+            this.$socket.emit('remote.rotateRight');
+          }
+          break;
+        // no default
+      }
+    },
+  },
+
+  mounted() {
+    document.addEventListener('keydown', this.onKey);
+    document.addEventListener('keyup', this.onKey);
   },
 };
 </script>

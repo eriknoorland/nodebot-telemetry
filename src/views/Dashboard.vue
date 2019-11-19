@@ -11,10 +11,6 @@
     <module>
       <camera />
     </module>
-
-    <module>
-      <keyboard-controller />
-    </module>
   </div>
 </template>
 
@@ -23,22 +19,18 @@ import Module from '@/components/Module.vue';
 import Log from '@/components/modules/Log.vue';
 import Lidar from '@/components/modules/Lidar.vue';
 import Camera from '@/components/modules/Camera.vue';
-import KeyboardController from '@/components/modules/KeyboardController.vue';
 
 export default {
-  name: 'Dashboard',
-
   components: {
     Module,
     Log,
     Lidar,
     Camera,
-    KeyboardController,
   },
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .modules {
   padding: 0 10px;
 

@@ -15,23 +15,33 @@
 
 <script>
 export default {
-  name: 'Battery',
-
   data() {
     return {
-      min: 3.2 * 4, // 4S battery
-      max: 4.2 * 4, // 4S battery
+      safeThreshold: 3.6,
       voltage: 0,
+      numCells: 0,
     };
   },
 
   computed: {
+    min() {
+      return 3.2 * this.numCells;
+    },
+
+    max() {
+      return 4.2 * this.numCells;
+    },
+
     percentage() {
+      if (!this.voltage || this.voltage < this.min) {
+        return 0;
+      }
+
       return Math.floor(((this.voltage - this.min) * 100) / (this.max - this.min));
     },
 
     isBatteryLow() {
-      return this.voltage <= this.min;
+      return this.voltage < (this.safeThreshold * this.numCells);
     },
   },
 
@@ -43,9 +53,10 @@ export default {
 
   sockets: {
     data({ battery }) {
-      const { voltage } = battery;
+      const { voltage, numCells } = battery;
 
-      this.voltage = voltage;
+      this.numCells = numCells;
+      this.voltage = voltage || 0;
     },
   },
 };

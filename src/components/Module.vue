@@ -3,14 +3,12 @@
     class="module"
     v-bind:class="modifiers"
   >
-    <slot></slot>
+    <slot />
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Module',
-
   props: {
     modifiers: {
       type: String,
@@ -20,7 +18,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .module {
   position: relative;
   margin: 10px 0 0 0;
@@ -28,6 +26,10 @@ export default {
   width: 100%;
   height: 300px;
   background: #fff;
+
+  &:last-child {
+    margin-bottom: 10px;
+  }
 
   &--padding {
     padding: 20px;
