@@ -4,11 +4,11 @@
       <log />
     </module>
 
-    <module>
+    <module v-if="sensors.includes('lidar')">
       <lidar />
     </module>
 
-    <module>
+    <module v-if="sensors.includes('camera')">
       <camera />
     </module>
   </div>
@@ -26,6 +26,18 @@ export default {
     Log,
     Lidar,
     Camera,
+  },
+
+  data() {
+    return {
+      sensors: [],
+    };
+  },
+
+  sockets: {
+    setup({ sensors }) {
+      this.sensors = sensors;
+    },
   },
 };
 </script>

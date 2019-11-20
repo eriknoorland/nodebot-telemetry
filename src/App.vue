@@ -10,7 +10,7 @@
           </div>
         </header-module>
 
-        <header-module>
+        <header-module v-if="sensors.includes('battery')">
           <battery />
         </header-module>
 
@@ -36,14 +36,24 @@ import FPS from '@/components/header/modules/FPS.vue';
 import Controls from '@/components/header/modules/Controls.vue';
 
 export default {
-  name: 'App',
-
   components: {
     NavBar,
     HeaderModule,
     Battery,
     FPS,
     Controls,
+  },
+
+  data() {
+    return {
+      sensors: [],
+    };
+  },
+
+  sockets: {
+    setup({ sensors }) {
+      this.sensors = sensors;
+    },
   },
 };
 </script>
