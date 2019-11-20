@@ -6,7 +6,7 @@
       <div class="header__modules">
         <header-module>
           <div class="header__logo">
-            Alan
+            {{ name }}
           </div>
         </header-module>
 
@@ -46,12 +46,14 @@ export default {
 
   data() {
     return {
+      name: '',
       sensors: [],
     };
   },
 
   sockets: {
-    setup({ sensors }) {
+    setup({ sensors, name }) {
+      this.name = name;
       this.sensors = sensors;
     },
   },
