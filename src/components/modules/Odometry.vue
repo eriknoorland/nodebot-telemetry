@@ -32,7 +32,9 @@
 </template>
 
 <script>
-// const ARENA_WIDTH = 360;
+import EventBus from '@/EventBus';
+
+const ARENA_WIDTH = 360;
 const ARENA_HEIGHT = 240;
 // const TILE_SIZE = 5;
 
@@ -57,6 +59,12 @@ const DISTANCE_PER_TICK = WHEEL_CIRCUMFERENCE / TICKS_PER_REVOLUTION;
 //   OBSTACLE: 3,
 // };
 
+const startPose = {
+  x: 19, // FIXME measured from back wall
+  y: 58 + (ARENA_HEIGHT / 2), // FIXME measured from left wall
+  phi: 0,
+};
+
 export default {
   data() {
     return {
@@ -65,11 +73,7 @@ export default {
       // numRows: NUM_ROWS,
       // numColumns: NUM_COLUMNS,
       // grid: [],
-      poses: [{
-        x: 19, // FIXME measured from back wall
-        y: 58 + (ARENA_HEIGHT / 2), // FIXME measured from left wall
-        phi: 0,
-      }],
+      poses: [startPose],
     };
   },
 
@@ -101,6 +105,35 @@ export default {
       const phi = lastPose.phi - ((distanceRight - distanceLeft) / WHEEL_BASE);
 
       return { x, y, phi };
+    },
+
+    clearCanvas() {
+      const { canvas } = this.$refs;
+
+      this.context.clearRect(0, 0, canvas.width, canvas.height);
+    },
+
+    drawArena() {
+      const x0 = 0;
+      const x1 = ARENA_WIDTH / 3;
+      const x2 = x1 * 2;
+      const x3 = ARENA_WIDTH;
+      const y0 = 0;
+      const y1 = ARENA_HEIGHT / 2;
+      const y2 = ARENA_HEIGHT;
+
+      this.context.strokeStyle = '#ccc';
+      this.context.beginPath();
+      this.context.moveTo(x1, y0);
+      this.context.lineTo(x2, y0);
+      this.context.lineTo(x2, y1);
+      this.context.lineTo(x3, y1);
+      this.context.lineTo(x3, y2);
+      this.context.lineTo(x0, y2);
+      this.context.lineTo(x0, y1);
+      this.context.lineTo(x1, y1);
+      this.context.lineTo(x1, y0);
+      this.context.stroke();
     },
 
     // generateGrid() {
@@ -136,12 +169,20 @@ export default {
     // copyTwoDimensionalArray(array) {
     //   return array.map(value => value.slice(0));
     // },
+
+    reset() {
+      this.poses = [startPose];
+      this.clearCanvas();
+    },
   },
 
   mounted() {
     const { canvas } = this.$refs;
 
     this.context = canvas.getContext('2d');
+    this.drawArena();
+
+    EventBus.$on('reset', this.reset);
 
     // this.generateGrid()
     //   .then(this.adjustGridToTShape)
@@ -168,31 +209,30 @@ $height: 240px;
 }
 
 .odometry__canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  border: 1px solid #ccc;
+  // position: absolute;
+  // top: 0;
+  // left: 0;
 }
 
-.odometry__grid {
-  display: flex;
-  width: $width;
-  flex-wrap: wrap;
-}
+// .odometry__grid {
+//   display: flex;
+//   width: $width;
+//   flex-wrap: wrap;
+// }
 
-.odometry__grid__row {
-  display: flex;
-}
+// .odometry__grid__row {
+//   display: flex;
+// }
 
-.odometry__grid__col {
-  width: 5px;
-  height: 5px;
-  border-right: 1px solid #fff;
-  border-bottom: 1px solid #fff;
+// .odometry__grid__col {
+//   width: 5px;
+//   height: 5px;
+//   border-right: 1px solid #fff;
+//   border-bottom: 1px solid #fff;
 
-  &--0 { background: #fff; }
-  &--1 { background: #eee; }
-  &--2 { background: #00f; }
-  &--3 { background: #f00; }
-}
+//   &--0 { background: #fff; }
+//   &--1 { background: #eee; }
+//   &--2 { background: #00f; }
+//   &--3 { background: #f00; }
+// }
 </style>

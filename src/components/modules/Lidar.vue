@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import EventBus from '@/EventBus';
 import degreesToRadians from '@/utils/degreesToRadians';
 
 export default {
@@ -107,6 +108,8 @@ export default {
 
     this.centerX = canvas.width * 0.5;
     this.centerY = canvas.height * 0.5;
+
+    EventBus.$on('reset', this.clearCanvas);
   },
 };
 </script>

@@ -40,6 +40,8 @@
 </template>
 
 <script>
+import EventBus from '@/EventBus';
+
 export default {
   data() {
     return {
@@ -65,6 +67,8 @@ export default {
 
     onStopClick() {
       this.$socket.emit('stop');
+      this.state = '';
+      EventBus.$emit('reset');
     },
 
     onShutdownClick() {

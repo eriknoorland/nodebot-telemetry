@@ -1,5 +1,8 @@
 <template>
-  <pre class="log" v-html="body"></pre>
+  <pre
+    class="log"
+    v-html="body"
+  />
 </template>
 
 <script>
