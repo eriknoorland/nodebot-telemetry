@@ -173,6 +173,7 @@ export default {
     reset() {
       this.poses = [startPose];
       this.clearCanvas();
+      this.drawArena();
     },
   },
 
