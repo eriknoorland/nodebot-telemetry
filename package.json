@@ -1,6 +1,6 @@
 {
   "name": "telemetry",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -38,15 +38,7 @@
       "@vue/airbnb"
     ],
     "rules": {
-      "object-curly-newline": [
-        "error",
-        {
-          "ObjectExpression": "always",
-          "ObjectPattern": {
-            "multiline": false
-          }
-        }
-      ]
+      "object-curly-newline": "off"
     },
     "parserOptions": {
       "parser": "babel-eslint"

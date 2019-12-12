@@ -9,8 +9,6 @@
 import degreesToRadians from '@/utils/degreesToRadians';
 
 export default {
-  name: 'Lidar',
-
   data() {
     return {
       canvas: null,

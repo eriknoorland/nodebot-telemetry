@@ -11,6 +11,10 @@
     <module v-if="sensors.includes('camera')">
       <camera />
     </module>
+
+    <module>
+      <odometry />
+    </module>
   </div>
 </template>
 
@@ -19,6 +23,7 @@ import Module from '@/components/Module.vue';
 import Log from '@/components/modules/Log.vue';
 import Lidar from '@/components/modules/Lidar.vue';
 import Camera from '@/components/modules/Camera.vue';
+import Odometry from '@/components/modules/Odometry.vue';
 
 export default {
   components: {
@@ -26,6 +31,7 @@ export default {
     Log,
     Lidar,
     Camera,
+    Odometry,
   },
 
   data() {
