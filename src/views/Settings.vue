@@ -1,12 +1,33 @@
 <template>
-  <div class="panel">
-    <form name="measurements" class="form">
-      <fieldset class="form__fieldset">
-        <legend class="form__legend">
-          Dimensions (mm)
-        </legend>
+  <panel>
+    <v-form name="arena">
+      <v-fieldset>
+        <v-legend label="Arena" />
 
-        <div class="form__element">
+        <form-element>
+          <select
+            v-model="selectedArena"
+            v-on:change="$store.commit('SET_SELECTED_ARENA', selectedArena)"
+          >
+            <option
+              v-for="(arena, index) in $store.state.arenas"
+              v-bind:key="index"
+              v-bind:value="arena"
+            >
+              {{ arena.name }}
+            </option>
+          </select>
+        </form-element>
+      </v-fieldset>
+    </v-form>
+  </panel>
+
+  <!-- <div class="panel">
+    <form name="measurements" class="form">
+      <v-fieldset>
+        <v-legend label="Dimensions (mm)" />
+
+        <form-element>
           <label class="form__element__label">
             Wheel radius
           </label>
@@ -16,9 +37,9 @@
             class="form__element__input"
             v-model="settings.dimensions.wheelRadius"
           >
-        </div>
+        </form-element>
 
-        <div class="form__element">
+        <form-element>
           <label class="form__element__label">
             Wheel base
           </label>
@@ -28,15 +49,13 @@
             class="form__element__input"
             v-model="settings.dimensions.wheelBase"
           >
-        </div>
-      </fieldset>
+        </form-element>
+      </v-fieldset>
 
-      <fieldset class="form__fieldset">
-        <legend class="form__legend">
-          Speed (mm/s)
-        </legend>
+      <v-fieldset>
+        <v-legend label="Speed (mm/s)" />
 
-        <div class="form__element">
+        <form-element>
           <label class="form__element__label">
             Straight line speed slow
           </label>
@@ -46,9 +65,9 @@
             class="form__element__input"
             v-model="settings.speed.straightLine.slow"
           >
-        </div>
+        </form-element>
 
-        <div class="form__element">
+        <form-element>
           <label class="form__element__label">
             Straight line speed fast
           </label>
@@ -58,9 +77,9 @@
             class="form__element__input"
             v-model="settings.speed.straightLine.fast"
           >
-        </div>
+        </form-element>
 
-        <div class="form__element">
+        <form-element>
           <label class="form__element__label">
             Turning speed
           </label>
@@ -70,9 +89,9 @@
             class="form__element__input"
             v-model="settings.speed.turning"
           >
-        </div>
+        </form-element>
 
-        <div class="form__element">
+        <form-element>
           <label class="form__element__label">
             Rotation speed
           </label>
@@ -82,15 +101,13 @@
             class="form__element__input"
             v-model="settings.speed.rotation"
           >
-        </div>
-      </fieldset>
+        </form-element>
+      </v-fieldset>
 
-      <fieldset class="form__fieldset">
-        <legend class="form__legend">
-          Arena
-        </legend>
+      <v-fieldset>
+        <v-legend label="Arena" />
 
-        <div class="form__element">
+        <form-element>
           <label class="form__element__label">
             Scale factor
           </label>
@@ -100,11 +117,11 @@
             class="form__element__input"
             v-model="settings.arena.scale"
           >
-        </div>
+        </form-element>
 
-        <div class="form__element">
+        <form-element>
           <label class="form__element__label">
-            Grid size (mm)
+            Grid size (cm)
           </label>
 
           <input
@@ -112,66 +129,68 @@
             class="form__element__input"
             v-model="settings.arena.gridSize"
           >
-        </div>
-      </fieldset>
+        </form-element>
+      </v-fieldset>
 
-      <div class="form__element">
+      <form-element>
         <button class="form__element__submit" v-on:click.prevent="onSaveClick()">
           Save
         </button>
-      </div>
+      </form-element>
     </form>
-  </div>
+  </div> -->
 </template>
 
 <script>
-import http from '@/http';
+import Panel from '@/components/Panel.vue';
+import vForm from '@/components/form/Form.vue';
+import vFieldset from '@/components/form/Fieldset.vue';
+import vLegend from '@/components/form/Legend.vue';
+import FormElement from '@/components/form/element/Element.vue';
+// import http from '@/http';
 
 export default {
-  data() {
-    return {
-      settings: {
-        dimensions: {
-          wheelRadius: 45,
-          wheelBase: 206,
-        },
-        speed: {
-          straightLine: {
-            slow: 10,
-            fast: 20,
-          },
-          turning: 10,
-          rotation: 10,
-        },
-        arena: {
-          scale: 1,
-          gridSize: 50,
-        },
-      },
-    };
+  components: {
+    Panel,
+    vForm,
+    vFieldset,
+    vLegend,
+    FormElement,
   },
 
-  methods: {
-    onSettingsData(data) {
-      this.settings = data;
-    },
-
-    onSaveClick() {
-      http.put(`${process.env.VUE_APP_API_URL}/v1/settings`, this.settings);
-    },
+  data() {
+    return {
+      selectedArena: this.$store.state.selectedArena,
+      // settings: {
+      //   dimensions: {
+      //     wheelRadius: 45,
+      //     wheelBase: 206,
+      //   },
+      //   speed: {
+      //     straightLine: {
+      //       slow: 10,
+      //       fast: 20,
+      //     },
+      //     turning: 10,
+      //     rotation: 10,
+      //   },
+      // },
+    };
   },
 
   mounted() {
     // http.get(`${process.env.VUE_APP_API_URL}/v1/settings`)
     //   .then(onSettingsData);
   },
+
+  methods: {
+    // onSettingsData(data) {
+    //   this.settings = data;
+    // },
+
+    // onSaveClick() {
+    //   http.put(`${process.env.VUE_APP_API_URL}/v1/settings`, this.settings);
+    // },
+  },
 };
 </script>
-
-<style lang="scss">
-.panel {
-  background: #fff;
-  margin: 10px;
-  padding: 20px;
-}
-</style>

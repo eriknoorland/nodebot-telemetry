@@ -2,13 +2,19 @@
   <nav class="navbar">
     <ul class="navbar__list">
       <li class="navbar__item">
-        <router-link to="/" class="navbar__link">
+        <router-link
+          to="/"
+          class="navbar__link"
+        >
           Dashboard
         </router-link>
       </li>
 
       <li class="navbar__item">
-        <router-link to="/settings" class="navbar__link">
+        <router-link
+          to="/settings"
+          class="navbar__link"
+        >
           Settings
         </router-link>
       </li>
@@ -40,11 +46,23 @@ export default {
 .navbar__link {
   text-transform: uppercase;
   text-decoration: none;
-  color: inherit;
+  color: #666;
+  transition: color .25s;
 
+  &:hover,
   &.router-link-exact-active {
-    color: #999;
-    cursor: default;
+    position: relative;
+    color: inherit;
+
+    &:after {
+      content: "";
+      position: absolute;
+      right: 0;
+      bottom: -2px;
+      left: 0;
+      height: 1px;
+      background: #fff;
+    }
   }
 }
 </style>
