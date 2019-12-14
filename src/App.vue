@@ -29,11 +29,13 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import NavBar from '@/components/header/NavBar.vue';
 import HeaderModule from '@/components/header/Module.vue';
 import Battery from '@/components/header/modules/Battery.vue';
 import FPS from '@/components/header/modules/FPS.vue';
 import Controls from '@/components/header/modules/Controls.vue';
+import EventBus from '@/EventBus';
 
 export default {
   components: {
@@ -51,7 +53,22 @@ export default {
     };
   },
 
+  computed: {
+    ...mapState(['selectedArena']),
+  },
+
+  watch: {
+    selectedArena(newValue) {
+      this.$socket.emit('selected_arena', newValue);
+    },
+  },
+
   sockets: {
+    connect() {
+      EventBus.$emit('reset');
+      this.$socket.emit('selected_arena', this.selectedArena);
+    },
+
     setup({ sensors, name }) {
       this.name = name;
       this.sensors = sensors;

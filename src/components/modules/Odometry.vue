@@ -1,7 +1,14 @@
 <template>
   <div class="odometry">
-    <div class="odometry__arena">
-      {{ selectedArena.name }}
+    <div class="odometry__info">
+      <div class="odometry__arena">
+        {{ selectedArena.name }}
+      </div>
+
+      <div class="odometry__pose">
+        position: {{ pose.x.toFixed(0) }}, {{ pose.y.toFixed(0) }}<br>
+        heading: {{ heading }}°
+      </div>
     </div>
 
     <canvas
@@ -22,11 +29,16 @@ export default {
     return {
       canvas: null,
       context: null,
+      pose: { x: 0, y: 0, phi: 0 },
     };
   },
 
   computed: {
     ...mapState(['selectedArena']),
+
+    heading() {
+      return (this.pose.phi * (180 / Math.PI)).toFixed(2);
+    },
   },
 
   sockets: {
@@ -34,6 +46,7 @@ export default {
       poses.forEach((pose) => {
         const { scale } = this.selectedArena;
 
+        this.pose = pose;
         this.context.fillRect(pose.x * scale, pose.y * scale, 1, 1);
       });
     },
@@ -99,9 +112,14 @@ export default {
   justify-content: center;
 }
 
-.odometry__arena {
+.odometry__info {
   position: absolute;
   top: 10px;
   left: 10px;
+  line-height: 1.2;
+}
+
+.odometry__pose {
+  color: #666;
 }
 </style>
