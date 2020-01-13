@@ -6,11 +6,10 @@ import router from './router';
 import store from './store';
 
 const SocketInstance = socketio(process.env.VUE_APP_SOCKETIO_HOST);
+const selectedArena = window.localStorage.getItem('selected_arena');
 
 Vue.use(VueSocketIO, SocketInstance);
 Vue.config.productionTip = false;
-
-const selectedArena = window.localStorage.getItem('selected_arena');
 
 store.commit('SET_SELECTED_ARENA', selectedArena ? JSON.parse(selectedArena) : store.state.arenas[0]);
 

@@ -14,12 +14,7 @@ const state = {
     },
   ],
 
-  selectedArena: {
-    name: 'HCC Robotica (360x240:1)',
-    width: 360,
-    height: 240,
-    scale: 1,
-  },
+  selectedArena: {},
 };
 
 export default state;
