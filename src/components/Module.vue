@@ -40,6 +40,14 @@ export default {
     padding-top: 0;
     width: 400px;
     height: 400px;
+
+    &--double {
+      width: 810px;
+    }
+
+    &--triple {
+      width: 1220px;
+    }
   }
 }
 </style>

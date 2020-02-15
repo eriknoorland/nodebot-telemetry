@@ -1,11 +1,11 @@
 <template>
-  <div class="odometry">
-    <div class="odometry__info">
-      <div class="odometry__arena">
+  <div class="localization">
+    <div class="localization__info">
+      <div class="localization_arena">
         {{ selectedArena.name }}
       </div>
 
-      <div class="odometry__pose">
+      <div class="localization__pose">
         position: {{ pose.x.toFixed(0) }}, {{ pose.y.toFixed(0) }}<br>
         heading: {{ heading }}°
       </div>
@@ -13,7 +13,7 @@
 
     <canvas
       ref="canvas"
-      class="odometry__canvas"
+      class="localizationcanvas"
       v-bind:width="selectedArena.width * selectedArena.scale"
       v-bind:height="selectedArena.height * selectedArena.scale"
     />
@@ -101,7 +101,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.odometry {
+.localization {
   position: absolute;
   top: 0;
   right: 0;
@@ -112,14 +112,14 @@ export default {
   justify-content: center;
 }
 
-.odometry__info {
+.localization__info {
   position: absolute;
   top: 10px;
   left: 10px;
   line-height: 1.2;
 }
 
-.odometry__pose {
+.localization__pose {
   color: #666;
 }
 </style>

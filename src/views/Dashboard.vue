@@ -13,7 +13,11 @@
     </module>
 
     <module>
-      <odometry />
+      <localization />
+    </module>
+
+    <module modifiers="module--triple">
+      <speed />
     </module>
   </div>
 </template>
@@ -23,7 +27,8 @@ import Module from '@/components/Module.vue';
 import Log from '@/components/modules/Log.vue';
 import Lidar from '@/components/modules/Lidar.vue';
 import Camera from '@/components/modules/Camera.vue';
-import Odometry from '@/components/modules/Odometry.vue';
+import Localization from '@/components/modules/Localization.vue';
+import Speed from '@/components/modules/Speed.vue';
 
 export default {
   components: {
@@ -31,7 +36,8 @@ export default {
     Log,
     Lidar,
     Camera,
-    Odometry,
+    Localization,
+    Speed,
   },
 
   data() {
