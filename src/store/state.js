@@ -1,15 +1,15 @@
 const state = {
   arenas: [
     {
-      name: 'HCC Robotica (360x240:1)',
-      width: 360,
-      height: 240,
+      name: 'HCC Robotica (3600x2400:1)',
+      width: 3600,
+      height: 2400,
       scale: 1,
     },
     {
-      name: 'Home (180x120:2)',
-      width: 180,
-      height: 120,
+      name: 'Home (1800x1200:2)',
+      width: 1800,
+      height: 1200,
       scale: 2,
     },
   ],

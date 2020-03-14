@@ -75,30 +75,51 @@ export default {
     onKey(event) {
       const { type, keyCode } = event;
 
-      event.preventDefault();
-
       switch (keyCode) {
+        // remote state
         case 32: // spacebar
-          if (type === 'keyup') this.$socket.emit('remote.stop');
+          if (type === 'keyup') {
+            event.preventDefault();
+            this.$socket.emit('remote.stop');
+          }
           break;
         case 38: // arrow up
-          if (type === 'keyup') this.$socket.emit('remote.forward');
+          if (type === 'keyup') {
+            event.preventDefault();
+            this.$socket.emit('remote.forward');
+          }
           break;
         case 40: // arrow down
-          if (type === 'keyup') this.$socket.emit('remote.reverse');
+          if (type === 'keyup') {
+            event.preventDefault();
+            this.$socket.emit('remote.reverse');
+          }
           break;
         case 37: // arrow left
-          if (type === 'keyup') this.$socket.emit('remote.rotateLeft');
+          if (type === 'keyup') {
+            event.preventDefault();
+            this.$socket.emit('remote.rotateLeft');
+          }
           break;
         case 39: // arrow right
-          if (type === 'keyup') this.$socket.emit('remote.rotateRight');
+          if (type === 'keyup') {
+            event.preventDefault();
+            this.$socket.emit('remote.rotateRight');
+          }
           break;
 
+        // umbmark state
         case 219: // [
-          if (type === 'keyup') this.$socket.emit('umbmark.left');
+          if (type === 'keyup') {
+            event.preventDefault();
+            this.$socket.emit('umbmark.left');
+          }
           break;
         case 221: // ]
-          if (type === 'keyup') this.$socket.emit('umbmark.right');
+          if (type === 'keyup') {
+            event.preventDefault();
+            this.$socket.emit('umbmark.right');
+          }
           break;
         // no default
       }

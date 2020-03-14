@@ -14,8 +14,8 @@
     <canvas
       ref="canvas"
       class="localizationcanvas"
-      v-bind:width="selectedArena.width * selectedArena.scale"
-      v-bind:height="selectedArena.height * selectedArena.scale"
+      v-bind:width="(selectedArena.width / 10) * selectedArena.scale"
+      v-bind:height="(selectedArena.height / 10) * selectedArena.scale"
     />
   </div>
 </template>
@@ -47,7 +47,7 @@ export default {
         const { scale } = this.selectedArena;
 
         this.pose = pose;
-        this.context.fillRect(pose.x * scale, pose.y * scale, 1, 1);
+        this.context.fillRect((pose.x / 10) * scale, (pose.y / 10) * scale, 1, 1);
       });
     },
   },
@@ -61,13 +61,16 @@ export default {
 
     drawArena() {
       const { width, height, scale } = this.selectedArena;
+      const scaledWidth = width / 10;
+      const scaledHeight = height / 10;
+
       const x0 = 0;
-      const x1 = (width * scale) / 3;
+      const x1 = (scaledWidth * scale) / 3;
       const x2 = x1 * 2;
-      const x3 = (width * scale);
+      const x3 = (scaledWidth * scale);
       const y0 = 0;
-      const y1 = (height * scale) / 2;
-      const y2 = (height * scale);
+      const y1 = (scaledHeight * scale) / 2;
+      const y2 = (scaledHeight * scale);
 
       this.context.strokeStyle = '#ccc';
       this.context.beginPath();
