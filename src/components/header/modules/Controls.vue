@@ -75,52 +75,30 @@ export default {
     onKey(event) {
       const { type, keyCode } = event;
 
+      event.preventDefault();
+
       switch (keyCode) {
         case 32: // spacebar
-          event.preventDefault();
-          this.space = type === 'keydown';
-
-          if (type === 'keyup') {
-            this.$socket.emit('remote.stop');
-          }
-          break;
-        case 66: // b
-          event.preventDefault();
-          if (type === 'keyup') {
-            this.$socket.emit('remote.beep');
-          }
+          if (type === 'keyup') this.$socket.emit('remote.stop');
           break;
         case 38: // arrow up
-          event.preventDefault();
-          this.up = type === 'keydown';
-
-          if (type === 'keyup') {
-            this.$socket.emit('remote.forward');
-          }
+          if (type === 'keyup') this.$socket.emit('remote.forward');
           break;
         case 40: // arrow down
-          event.preventDefault();
-          this.down = type === 'keydown';
-
-          if (type === 'keyup') {
-            this.$socket.emit('remote.reverse');
-          }
+          if (type === 'keyup') this.$socket.emit('remote.reverse');
           break;
         case 37: // arrow left
-          event.preventDefault();
-          this.left = type === 'keydown';
-
-          if (type === 'keyup') {
-            this.$socket.emit('remote.rotateLeft');
-          }
+          if (type === 'keyup') this.$socket.emit('remote.rotateLeft');
           break;
         case 39: // arrow right
-          event.preventDefault();
-          this.right = type === 'keydown';
+          if (type === 'keyup') this.$socket.emit('remote.rotateRight');
+          break;
 
-          if (type === 'keyup') {
-            this.$socket.emit('remote.rotateRight');
-          }
+        case 219: // [
+          if (type === 'keyup') this.$socket.emit('umbmark.left');
+          break;
+        case 221: // ]
+          if (type === 'keyup') this.$socket.emit('umbmark.right');
           break;
         // no default
       }
