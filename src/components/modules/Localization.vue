@@ -37,7 +37,7 @@ export default {
     ...mapState(['selectedArena']),
 
     heading() {
-      return (this.pose.phi * (180 / Math.PI)).toFixed(2);
+      return Math.abs((this.pose.phi * (180 / Math.PI)) % 360).toFixed(2);
     },
   },
 
