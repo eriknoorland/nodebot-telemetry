@@ -107,6 +107,12 @@ export default {
             this.$socket.emit('remote.rotateRight');
           }
           break;
+        case 82: // r
+          if (type === 'keyup') {
+            event.preventDefault();
+            this.$socket.emit('remote.resetIMU');
+          }
+          break;
 
         // umbmark state
         case 219: // [
