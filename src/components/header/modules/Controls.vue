@@ -1,16 +1,22 @@
 <template>
   <div class="controls">
-    <select class="controls__select" v-model="state">
-      <option disabled value="">
-        Select state
+    <select
+      class="controls__select"
+      v-model="program"
+    >
+      <option
+        v-bind:value="{}"
+        disabled
+      >
+        Select program
       </option>
 
       <option
-        v-for="(state, index) in states"
-        v-bind:key="index"
-        v-bind:value="index"
+        v-for="(program) in programs"
+        v-bind:key="program.id"
+        v-bind:value="program"
       >
-        {{ state.name }}
+        {{ program.name }}
       </option>
     </select>
 
@@ -40,32 +46,42 @@
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      states: [],
-      state: '',
-    };
-  },
+import { mapState } from 'vuex';
 
-  sockets: {
-    setup({ states }) {
-      this.states = states;
+const keyCodesUsed = [
+  'ArrowUp',
+  'ArrowLeft',
+  'ArrowDown',
+  'ArrowRight',
+  'Numpad0',
+  'Space',
+];
+
+export default {
+  computed: {
+    ...mapState('setup', ['programs', 'selectedProgram']),
+
+    program: {
+      get() {
+        return this.selectedProgram;
+      },
+
+      set(value) {
+        this.$store.commit('setup/SET_SELECTED_PROGRAM', value);
+      },
     },
   },
 
   methods: {
     onStartClick() {
-      const state = parseInt(this.state, 10);
-
-      if (!Number.isNaN(state)) {
-        this.$socket.emit('start', state);
+      if (!Number.isNaN(this.selectedProgram.id)) {
+        this.$socket.emit('start', this.selectedProgram.id);
       }
     },
 
     onStopClick() {
       this.$socket.emit('stop');
-      this.state = '';
+      this.$store.commit('setup/SET_SELECTED_PROGRAM', {});
     },
 
     onShutdownClick() {
@@ -73,61 +89,14 @@ export default {
     },
 
     onKey(event) {
-      const { type, keyCode } = event;
+      const { type, code } = event;
 
-      switch (keyCode) {
-        // remote state
-        case 32: // spacebar
-          if (type === 'keyup') {
-            event.preventDefault();
-            this.$socket.emit('remote.stop');
-          }
-          break;
-        case 38: // arrow up
-          if (type === 'keyup') {
-            event.preventDefault();
-            this.$socket.emit('remote.forward');
-          }
-          break;
-        case 40: // arrow down
-          if (type === 'keyup') {
-            event.preventDefault();
-            this.$socket.emit('remote.reverse');
-          }
-          break;
-        case 37: // arrow left
-          if (type === 'keyup') {
-            event.preventDefault();
-            this.$socket.emit('remote.rotateLeft');
-          }
-          break;
-        case 39: // arrow right
-          if (type === 'keyup') {
-            event.preventDefault();
-            this.$socket.emit('remote.rotateRight');
-          }
-          break;
-        case 82: // r
-          if (type === 'keyup') {
-            event.preventDefault();
-            this.$socket.emit('remote.resetIMU');
-          }
-          break;
+      if (keyCodesUsed.includes(code)) {
+        event.preventDefault();
 
-        // umbmark state
-        case 219: // [
-          if (type === 'keyup') {
-            event.preventDefault();
-            this.$socket.emit('umbmark.left');
-          }
-          break;
-        case 221: // ]
-          if (type === 'keyup') {
-            event.preventDefault();
-            this.$socket.emit('umbmark.right');
-          }
-          break;
-        // no default
+        if (type === 'keyup') {
+          this.$socket.emit(code);
+        }
       }
     },
   },
@@ -159,10 +128,6 @@ export default {
   }
 }
 
-.controls__buttons {
-
-}
-
 .controls__button {
   margin: 0 5px 0 0;
   padding: 5px 10px;
@@ -173,24 +138,23 @@ export default {
   &:last-child {
     margin: 0;
   }
-}
 
-.controls__button--start {
-  border-color: #c3e6cb;
-  background: #d4edda;
-  color: #155724;
-}
+  &--start {
+    border-color: #c3e6cb;
+    background: #d4edda;
+    color: #155724;
+  }
 
-.controls__button--stop {
-  border-color: #ffeeba;
-  background: #fff3cd;
-  color: #856404;
-}
+  &--stop {
+    border-color: #ffeeba;
+    background: #fff3cd;
+    color: #856404;
+  }
 
-.controls__button--shutdown {
-  border-color: #f8d7da;
-  background: #f5c6cb;
-  color: #721c24;
+  &--shutdown {
+    border-color: #f8d7da;
+    background: #f5c6cb;
+    color: #721c24;
+  }
 }
-
 </style>

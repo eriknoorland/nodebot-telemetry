@@ -1,36 +1,16 @@
 <template>
   <pre
     class="log"
-    v-html="body"
+    v-html="log"
   />
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
-  name: 'Log',
-
-  data() {
-    return {
-      body: '',
-    };
-  },
-
-  sockets: {
-    connect() {},
-
-    disconnect() {
-      this.body = [
-        '<span style="color: #f92472;">[app] server disconnected</span>',
-        this.body,
-      ].join('\n');
-    },
-
-    log(log) {
-      this.body = log
-        .split(',')
-        .reverse()
-        .join('\n');
-    },
+  computed: {
+    ...mapState('log', ['log']),
   },
 };
 </script>

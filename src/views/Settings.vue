@@ -5,12 +5,9 @@
         <v-legend label="Arena" />
 
         <form-element>
-          <select
-            v-model="selectedArena"
-            v-on:change="$store.commit('SET_SELECTED_ARENA', selectedArena)"
-          >
+          <select v-model="arena">
             <option
-              v-for="(arena, index) in $store.state.arenas"
+              v-for="(arena, index) in arenas"
               v-bind:key="index"
               v-bind:value="arena"
             >
@@ -142,12 +139,12 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import Panel from '@/components/Panel.vue';
 import vForm from '@/components/form/Form.vue';
 import vFieldset from '@/components/form/Fieldset.vue';
 import vLegend from '@/components/form/Legend.vue';
 import FormElement from '@/components/form/element/Element.vue';
-// import http from '@/http';
 
 export default {
   components: {
@@ -158,39 +155,18 @@ export default {
     FormElement,
   },
 
-  data() {
-    return {
-      selectedArena: this.$store.state.selectedArena,
-      // settings: {
-      //   dimensions: {
-      //     wheelRadius: 45,
-      //     wheelBase: 206,
-      //   },
-      //   speed: {
-      //     straightLine: {
-      //       slow: 10,
-      //       fast: 20,
-      //     },
-      //     turning: 10,
-      //     rotation: 10,
-      //   },
-      // },
-    };
-  },
+  computed: {
+    ...mapState('setup', ['arenas', 'selectedArena']),
 
-  mounted() {
-    // http.get(`${process.env.VUE_APP_API_URL}/v1/settings`)
-    //   .then(onSettingsData);
-  },
+    arena: {
+      get() {
+        return this.selectedArena;
+      },
 
-  methods: {
-    // onSettingsData(data) {
-    //   this.settings = data;
-    // },
-
-    // onSaveClick() {
-    //   http.put(`${process.env.VUE_APP_API_URL}/v1/settings`, this.settings);
-    // },
+      set(value) {
+        this.$store.commit('setup/SET_SELECTED_ARENA', value);
+      },
+    },
   },
 };
 </script>

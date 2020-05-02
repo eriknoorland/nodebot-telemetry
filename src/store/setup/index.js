@@ -1,3 +1,7 @@
+import actions from './actions';
+import getters from './getters';
+import mutations from './mutations';
+
 const state = {
   arenas: [
     {
@@ -13,8 +17,17 @@ const state = {
       scale: 2,
     },
   ],
-
   selectedArena: {},
+  programs: [],
+  selectedProgram: {},
+  sensors: [],
+  name: '',
 };
 
-export default state;
+export default {
+  namespaced: true,
+  state,
+  actions,
+  getters,
+  mutations,
+};

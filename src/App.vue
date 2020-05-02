@@ -46,15 +46,8 @@ export default {
     Controls,
   },
 
-  data() {
-    return {
-      name: '',
-      sensors: [],
-    };
-  },
-
   computed: {
-    ...mapState(['selectedArena']),
+    ...mapState('setup', ['selectedArena', 'sensors', 'name']),
   },
 
   watch: {
@@ -67,11 +60,6 @@ export default {
     connect() {
       EventBus.$emit('reset');
       this.$socket.emit('selected_arena', this.selectedArena);
-    },
-
-    setup({ sensors, name }) {
-      this.name = name;
-      this.sensors = sensors;
     },
   },
 };

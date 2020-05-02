@@ -3,7 +3,7 @@
     <canvas
       ref="canvas"
       class="camera__canvas"
-    ></canvas>
+    />
   </div>
 </template>
 
@@ -11,8 +11,6 @@
 import map from '../../utils/map';
 
 export default {
-  name: 'Camera',
-
   data() {
     return {
       canvas: null,

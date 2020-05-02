@@ -34,15 +34,16 @@ export default {
   },
 
   computed: {
-    ...mapState(['selectedArena']),
+    ...mapState('setup', ['selectedArena']),
+    ...mapState('localization', ['poses']),
 
     heading() {
       return Math.abs((this.pose.phi * (180 / Math.PI)) % 360).toFixed(2);
     },
   },
 
-  sockets: {
-    data({ poses }) {
+  watch: {
+    poses(poses) {
       poses.forEach((pose) => {
         const { scale } = this.selectedArena;
 

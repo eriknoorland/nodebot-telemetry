@@ -1,29 +1,15 @@
 <template>
   <div class="fps">
-    FPS {{ actual }}/{{ target }}
+    FPS {{ actual.toFixed(0) }} / {{ target }}
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
-  name: 'FPS',
-
-  data() {
-    return {
-      actual: 0,
-      target: 0,
-    };
-  },
-
-  sockets: {
-    data({ fps }) {
-      this.actual = fps.actual.toFixed(0);
-      this.target = fps.target;
-    },
+  computed: {
+    ...mapState('fps', ['actual', 'target']),
   },
 };
 </script>
-
-<style lang="scss" scoped>
-
-</style>

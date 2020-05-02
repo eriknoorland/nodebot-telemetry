@@ -8,11 +8,16 @@ const selectedArena = window.localStorage.getItem('selected_arena');
 
 Vue.use(new VueSocketIO({
   connection: process.env.VUE_APP_SOCKETIO_HOST,
+  vuex: {
+    store,
+    actionPrefix: 'SOCKET_',
+    mutationPrefix: 'SOCKET_',
+  },
 }));
 
 Vue.config.productionTip = false;
 
-store.commit('SET_SELECTED_ARENA', selectedArena ? JSON.parse(selectedArena) : store.state.arenas[0]);
+store.commit('setup/SET_SELECTED_ARENA', selectedArena ? JSON.parse(selectedArena) : store.state.arenas[0]);
 
 new Vue({
   router,

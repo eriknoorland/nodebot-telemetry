@@ -3,14 +3,12 @@
     class="header__module"
     v-bind:class="modifiers"
   >
-    <slot></slot>
+    <slot />
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Module',
-
   props: {
     modifiers: {
       type: String,

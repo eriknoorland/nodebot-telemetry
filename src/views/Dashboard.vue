@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import Module from '@/components/Module.vue';
 import Log from '@/components/modules/Log.vue';
 import Lidar from '@/components/modules/Lidar.vue';
@@ -40,16 +41,8 @@ export default {
     Speed,
   },
 
-  data() {
-    return {
-      sensors: [],
-    };
-  },
-
-  sockets: {
-    setup({ sensors }) {
-      this.sensors = sensors;
-    },
+  computed: {
+    ...mapState('setup', ['sensors']),
   },
 };
 </script>

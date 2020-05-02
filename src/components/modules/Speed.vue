@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import LineChart from '@/components/charts/Line';
 
 const numItems = 50;
@@ -42,9 +43,13 @@ export default {
     };
   },
 
-  sockets: {
-    data({ odometry }) {
-      odometry.forEach(({ leftTicks, rightTicks }) => {
+  computed: {
+    ...mapState('speed', ['odometry']),
+  },
+
+  watch: {
+    odometry(value) {
+      value.forEach(({ leftTicks, rightTicks }) => {
         leftTickData.push(leftTicks);
         rightTickData.push(rightTicks);
 
@@ -57,16 +62,8 @@ export default {
       this.chartData = {
         labels,
         datasets: [
-          {
-            label: 'Left ticks',
-            borderColor: '#f00',
-            data: leftTickData,
-          },
-          {
-            label: 'Right ticks',
-            borderColor: '#00f',
-            data: rightTickData,
-          },
+          { label: 'Left ticks', borderColor: '#f00', data: leftTickData },
+          { label: 'Right ticks', borderColor: '#00f', data: rightTickData },
         ],
       };
     },

@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import EventBus from '@/EventBus';
 import degreesToRadians from '@/utils/degreesToRadians';
 
@@ -20,15 +21,20 @@ export default {
     };
   },
 
-  sockets: {
-    data({ lidar, imu }) {
-      const { heading } = imu;
+  computed: {
+    ...mapState('lidar', ['lidar', 'imu']),
+  },
 
-      this.heading = heading || 0;
+  watch: {
+    imu(value) {
+      this.heading = value.heading || 0;
+    },
+
+    lidar(value) {
       this.clearCanvas();
-      this.drawSurroundings(lidar);
+      this.drawSurroundings(value);
       this.drawDistanceCircles();
-      this.drawLine(heading, '#f00');
+      this.drawLine(this.heading, '#f00');
       this.drawMe();
     },
   },

@@ -6,7 +6,7 @@
         class="batteryStatus__indicator"
         v-bind:class="{ '_is_too_low': isBatteryLow }"
         v-bind:style="{ width: `${percentage}%` }"
-      ></div>
+      />
     </div>
 
     <span>{{ percentage }}% / {{ voltage | decimalize }}V</span>
@@ -14,22 +14,24 @@
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      safeThreshold: 3.6,
-      voltage: 0,
-      numCells: 0,
-    };
-  },
+import { mapState } from 'vuex';
 
+export default {
   computed: {
+    ...mapState('battery', [
+      'minVoltage',
+      'minThresholdVoltage',
+      'maxVoltage',
+      'numCells',
+      'voltage',
+    ]),
+
     min() {
-      return 3.2 * this.numCells;
+      return this.minVoltage * this.numCells;
     },
 
     max() {
-      return 4.2 * this.numCells;
+      return this.maxVoltage * this.numCells;
     },
 
     percentage() {
@@ -41,22 +43,13 @@ export default {
     },
 
     isBatteryLow() {
-      return this.voltage < (this.safeThreshold * this.numCells);
+      return this.voltage < (this.minThresholdVoltage * this.numCells);
     },
   },
 
   filters: {
     decimalize(value) {
       return value.toFixed(2);
-    },
-  },
-
-  sockets: {
-    data({ battery }) {
-      const { voltage, numCells } = battery;
-
-      this.numCells = numCells;
-      this.voltage = voltage || 0;
     },
   },
 };

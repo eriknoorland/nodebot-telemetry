@@ -23,9 +23,7 @@
 </template>
 
 <script>
-export default {
-  name: 'NavBar',
-};
+export default {};
 </script>
 
 <style lang="scss">
