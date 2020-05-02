@@ -56,11 +56,10 @@ export default {
     },
   },
 
-  sockets: {
-    connect() {
-      EventBus.$emit('reset');
+  mounted() {
+    EventBus.$on('reset', () => {
       this.$socket.emit('selected_arena', this.selectedArena);
-    },
+    });
   },
 };
 </script>
