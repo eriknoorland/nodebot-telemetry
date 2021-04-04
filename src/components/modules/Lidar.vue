@@ -27,7 +27,9 @@ export default {
 
   watch: {
     imu(value) {
-      this.heading = value.heading || 0;
+      if (value) {
+        this.heading = value.heading || 0;
+      }
     },
 
     lidar(value) {

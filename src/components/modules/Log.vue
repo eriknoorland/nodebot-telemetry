@@ -29,12 +29,8 @@ export default {
   color: #fff;
   font-family: Monaco;
   font-size: 9px;
+  line-height: 1.4;
   overflow: hidden;
-  overflow-y: scroll;
-
-  span {
-    display: inline-block;
-    margin: 1px 0;
-  }
+  overflow-y: auto;
 }
 </style>

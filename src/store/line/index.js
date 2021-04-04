@@ -1,8 +1,7 @@
 import mutations from './mutations';
 
 const state = {
-  actual: 0,
-  target: 0,
+  line: [],
 };
 
 export default {

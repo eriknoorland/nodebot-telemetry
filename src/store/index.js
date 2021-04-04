@@ -6,6 +6,7 @@ import fps from './fps';
 import log from './log';
 import localization from './localization';
 import lidar from './lidar';
+import line from './line';
 import setup from './setup';
 import speed from './speed';
 
@@ -24,6 +25,7 @@ export default new Vuex.Store({
     log,
     localization,
     lidar,
+    line,
     setup,
     speed,
   },

@@ -8,15 +8,22 @@
       <lidar />
     </module>
 
+    <module v-if="sensors.includes('line')">
+      <line-sensor />
+    </module>
+
     <module v-if="sensors.includes('camera')">
       <camera />
     </module>
 
-    <module>
+    <module v-if="sensors.includes('poses')">
       <localization />
     </module>
 
-    <module modifiers="module--triple">
+    <module
+      v-if="sensors.includes('odometry')"
+      modifiers="module--triple"
+    >
       <speed />
     </module>
   </div>
@@ -27,6 +34,7 @@ import { mapState } from 'vuex';
 import Module from '@/components/Module.vue';
 import Log from '@/components/modules/Log.vue';
 import Lidar from '@/components/modules/Lidar.vue';
+import LineSensor from '@/components/modules/LineSensor.vue';
 import Camera from '@/components/modules/Camera.vue';
 import Localization from '@/components/modules/Localization.vue';
 import Speed from '@/components/modules/Speed.vue';
@@ -36,6 +44,7 @@ export default {
     Module,
     Log,
     Lidar,
+    LineSensor,
     Camera,
     Localization,
     Speed,
