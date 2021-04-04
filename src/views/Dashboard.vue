@@ -4,20 +4,20 @@
       <log />
     </module>
 
-    <module v-if="sensors.includes('lidar')">
-      <lidar />
+    <module v-if="sensors.includes('poses')">
+      <localization />
     </module>
 
-    <module v-if="sensors.includes('line')">
-      <line-sensor />
+    <module v-if="sensors.includes('lidar')">
+      <lidar />
     </module>
 
     <module v-if="sensors.includes('camera')">
       <camera />
     </module>
 
-    <module v-if="sensors.includes('poses')">
-      <localization />
+    <module v-if="sensors.includes('line')">
+      <line-sensor />
     </module>
 
     <module

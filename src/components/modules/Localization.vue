@@ -38,7 +38,13 @@ export default {
     ...mapState('localization', ['poses']),
 
     heading() {
-      return Math.abs((this.pose.phi * (180 / Math.PI)) % 360).toFixed(2);
+      const angleDegrees = (this.pose.phi * (180 / Math.PI)) % 360;
+
+      if (angleDegrees < 0) {
+        return 360 + angleDegrees;
+      }
+
+      return angleDegrees.toFixed(2);
     },
   },
 
@@ -46,9 +52,11 @@ export default {
     poses(poses) {
       poses.forEach((pose) => {
         const { scale } = this.selectedArena;
+        const x = (pose.x / 10) * scale;
+        const y = (pose.y / 10) * scale;
 
+        this.context.fillRect(x, y, 1, 1);
         this.pose = pose;
-        this.context.fillRect((pose.x / 10) * scale, (pose.y / 10) * scale, 1, 1);
       });
     },
   },
