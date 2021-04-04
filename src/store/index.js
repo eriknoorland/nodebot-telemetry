@@ -8,7 +8,7 @@ import localization from './localization';
 import lidar from './lidar';
 import line from './line';
 import setup from './setup';
-import speed from './speed';
+import odometry from './odometry';
 
 Vue.use(Vuex);
 
@@ -27,6 +27,6 @@ export default new Vuex.Store({
     lidar,
     line,
     setup,
-    speed,
+    odometry,
   },
 });

@@ -44,11 +44,11 @@ export default {
   },
 
   computed: {
-    ...mapState('speed', ['odometry']),
+    ...mapState('odometry', ['ticks']),
   },
 
   watch: {
-    odometry(value) {
+    ticks(value) {
       value.forEach(({ leftTicks, rightTicks }) => {
         leftTickData.push(leftTicks);
         rightTickData.push(rightTicks);

@@ -1,7 +1,7 @@
 import mutations from './mutations';
 
 const state = {
-  odometry: [],
+  ticks: [],
 };
 
 export default {

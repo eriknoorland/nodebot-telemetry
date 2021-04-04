@@ -8,15 +8,13 @@ const mutations = {
     state.selectedProgram = program;
   },
 
-  SOCKET_setup(state, { name, sensors, states }) {
-    const programs = states.map((program, index) => ({
+  SOCKET_setup(state, { name, sensors, programs }) {
+    state.name = name;
+    state.sensors = sensors;
+    state.programs = programs.map((program, index) => ({
       id: index,
       ...program,
     }));
-
-    state.name = name;
-    state.sensors = sensors;
-    state.programs = programs;
   },
 };
 

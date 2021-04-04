@@ -24,7 +24,7 @@
       v-if="sensors.includes('odometry')"
       modifiers="module--triple"
     >
-      <speed />
+      <odometry />
     </module>
   </div>
 </template>
@@ -37,7 +37,7 @@ import Lidar from '@/components/modules/Lidar.vue';
 import LineSensor from '@/components/modules/LineSensor.vue';
 import Camera from '@/components/modules/Camera.vue';
 import Localization from '@/components/modules/Localization.vue';
-import Speed from '@/components/modules/Speed.vue';
+import Odometry from '@/components/modules/Odometry.vue';
 
 export default {
   components: {
@@ -47,7 +47,7 @@ export default {
     LineSensor,
     Camera,
     Localization,
-    Speed,
+    Odometry,
   },
 
   computed: {
