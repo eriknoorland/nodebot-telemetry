@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Dashboard from './views/Dashboard.vue';
+
+const Dashboard = () => import(/* webpackChunkName: "dashboard" */ './views/Dashboard.vue');
+const Settings = () => import(/* webpackChunkName: "settings" */ './views/Settings.vue');
 
 Vue.use(Router);
 
@@ -16,7 +18,7 @@ export default new Router({
     {
       path: '/settings',
       name: 'settings',
-      component: () => import(/* webpackChunkName: "settings" */ './views/Settings.vue'),
+      component: Settings,
     },
   ],
 });

@@ -32,22 +32,16 @@
 <script>
 import { mapState } from 'vuex';
 import Module from '@/components/Module.vue';
-import Log from '@/components/modules/Log.vue';
-import Lidar from '@/components/modules/Lidar.vue';
-import LineSensor from '@/components/modules/LineSensor.vue';
-import Camera from '@/components/modules/Camera.vue';
-import Localization from '@/components/modules/Localization.vue';
-import Odometry from '@/components/modules/Odometry.vue';
 
 export default {
   components: {
     Module,
-    Log,
-    Lidar,
-    LineSensor,
-    Camera,
-    Localization,
-    Odometry,
+    Log: () => import(/* webpackChunkName: "log" */ '@/components/modules/Log.vue'),
+    Lidar: () => import(/* webpackChunkName: "lidar" */ '@/components/modules/Lidar.vue'),
+    LineSensor: () => import(/* webpackChunkName: "lineSensor" */ '@/components/modules/LineSensor.vue'),
+    Camera: () => import(/* webpackChunkName: "camera" */ '@/components/modules/Camera.vue'),
+    Localization: () => import(/* webpackChunkName: "localization" */ '@/components/modules/Localization.vue'),
+    Odometry: () => import(/* webpackChunkName: "odometry" */ '@/components/modules/Odometry.vue'),
   },
 
   computed: {
