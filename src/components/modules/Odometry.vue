@@ -29,8 +29,18 @@ import LineChart from '@/components/charts/Line';
 
 const numItems = 50;
 const labels = new Array(numItems).fill('');
-const leftTickData = [];
-const rightTickData = [];
+const leftTickData = new Array(numItems).fill(0);
+const rightTickData = new Array(numItems).fill(0);
+const datasetLeftTicks = {
+  label: 'Left motor ticks',
+  borderColor: '#f00',
+  data: leftTickData,
+};
+const datasetRightTicks = {
+  label: 'Right motor ticks',
+  borderColor: '#00f',
+  data: rightTickData,
+};
 
 export default {
   components: {
@@ -39,7 +49,14 @@ export default {
 
   data() {
     return {
-      chartData: {},
+      noTicksCount: 0,
+      chartData: {
+        labels,
+        datasets: [
+          datasetLeftTicks,
+          datasetRightTicks,
+        ],
+      },
     };
   },
 
@@ -48,8 +65,20 @@ export default {
   },
 
   watch: {
-    ticks(value) {
-      value.forEach(({ leftTicks, rightTicks }) => {
+    ticks(data) {
+      const dataHasTicks = data.every(({ leftTicks, rightTicks }) => !!leftTicks && !!rightTicks);
+
+      if (dataHasTicks) {
+        this.noTicksCount = 0;
+      } else {
+        this.noTicksCount += 1;
+
+        if (this.noTicksCount >= 3) {
+          return;
+        }
+      }
+
+      data.forEach(({ leftTicks, rightTicks }) => {
         leftTickData.push(leftTicks);
         rightTickData.push(rightTicks);
 
@@ -60,11 +89,8 @@ export default {
       });
 
       this.chartData = {
+        datasets: [datasetLeftTicks, datasetRightTicks],
         labels,
-        datasets: [
-          { label: 'Left ticks', borderColor: '#f00', data: leftTickData },
-          { label: 'Right ticks', borderColor: '#00f', data: rightTickData },
-        ],
       };
     },
   },
