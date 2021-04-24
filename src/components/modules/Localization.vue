@@ -11,12 +11,20 @@
       </div>
     </div>
 
-    <canvas
-      ref="canvas"
-      class="localizationcanvas"
-      v-bind:width="(selectedArena.width / 10) * selectedArena.scale"
-      v-bind:height="(selectedArena.height / 10) * selectedArena.scale"
-    />
+    <div class="localization__canvasWrapper">
+      <canvas
+        ref="canvas"
+        class="localization__canvas"
+        v-bind:width="(selectedArena.width / 10) * selectedArena.scale"
+        v-bind:height="(selectedArena.height / 10) * selectedArena.scale"
+      />
+
+      <div
+        v-show="pose.x !== 0 && pose.y !== 0"
+        v-bind:style="robotCss"
+        class="localization__robot"
+      />
+    </div>
   </div>
 </template>
 
@@ -27,7 +35,6 @@ import EventBus from '@/EventBus';
 export default {
   data() {
     return {
-      canvas: null,
       context: null,
       pose: { x: 0, y: 0, phi: 0 },
     };
@@ -45,6 +52,18 @@ export default {
       }
 
       return angleDegrees.toFixed(2);
+    },
+
+    robotCss() {
+      const { scale } = this.selectedArena;
+      const xOffset = 5;
+      const yOffset = 10;
+
+      return {
+        left: `${((this.pose.x / 10) * scale) - xOffset}px`,
+        top: `${((this.pose.y / 10) * scale) - yOffset}px`,
+        transform: `rotate(${this.pose.phi}rad)`,
+      };
     },
   },
 
@@ -133,5 +152,20 @@ export default {
 
 .localization__pose {
   color: #666;
+}
+
+.localization__canvasWrapper {
+  position: relative;
+}
+
+.localization__robot {
+  --size: 10px;
+
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-top: var(--size) solid transparent;
+  border-bottom: var(--size) solid transparent;
+  border-left: var(--size) solid rgba(#05f, .5);
 }
 </style>
