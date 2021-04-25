@@ -47,6 +47,7 @@
               top: `${waypoint.y - 4}px`,
               left: `${waypoint.x - 4}px`,
             }"
+            v-bind:data-index="index+1"
             class="localization__waypoint"
           />
         </div>
@@ -262,6 +263,15 @@ export default {
   height: var(--size);
   border-radius: 50%;
   background: rgba(green, .5);
+
+  &:after {
+    content: attr(data-index);
+    position: relative;
+    top: -2px;
+    left: 10px;
+    font-size: 10px;
+    color: rgba(#000, .5);
+  }
 }
 
 .localization__robot {

@@ -35,11 +35,13 @@ const datasetLeftTicks = {
   label: 'Left motor ticks',
   borderColor: '#f00',
   data: leftTickData,
+  borderWidth: 1,
 };
 const datasetRightTicks = {
   label: 'Right motor ticks',
   borderColor: '#00f',
   data: rightTickData,
+  borderWidth: 1,
 };
 
 export default {
