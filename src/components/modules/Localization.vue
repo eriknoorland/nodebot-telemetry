@@ -1,29 +1,62 @@
 <template>
   <div class="localization">
-    <div class="localization__info">
-      <div class="localization_arena">
-        {{ selectedArena.name }}
+    <div class="localization__header">
+      <div class="localization__info">
+        <div class="localization_arena">
+          {{ selectedArena.name }}
+        </div>
+
+        <div class="localization__pose">
+          position: {{ pose.x.toFixed(0) }}, {{ pose.y.toFixed(0) }}<br>
+          heading: {{ heading }}°
+        </div>
       </div>
 
-      <div class="localization__pose">
-        position: {{ pose.x.toFixed(0) }}, {{ pose.y.toFixed(0) }}<br>
-        heading: {{ heading }}°
+      <div class="localization__waypointButtons">
+        <button
+          class="localization__clearWaypoints"
+          v-on:click="onClearWaypointsClick"
+        >
+          Clear WP's
+        </button>
+
+        <button
+          class="localization__sendWaypoints"
+          v-on:click="onSendWaypointsClick"
+        >
+          Send WP's
+        </button>
       </div>
     </div>
 
-    <div class="localization__canvasWrapper">
-      <canvas
-        ref="canvas"
-        class="localization__canvas"
-        v-bind:width="(selectedArena.width / 10) * selectedArena.scale"
-        v-bind:height="(selectedArena.height / 10) * selectedArena.scale"
-      />
+    <div class="localization__canvasContainer">
+      <div class="localization__canvasWrapper">
+        <canvas
+          ref="canvas"
+          class="localization__canvas"
+          v-bind:width="(selectedArena.width / 10) * selectedArena.scale"
+          v-bind:height="(selectedArena.height / 10) * selectedArena.scale"
+          v-on:click="onWaypointsClick"
+        />
 
-      <div
-        v-show="pose.x !== 0 && pose.y !== 0"
-        v-bind:style="robotCss"
-        class="localization__robot"
-      />
+        <div class="localization__waypoints">
+          <div
+            v-for="(waypoint, index) in waypoints"
+            v-bind:key="index"
+            v-bind:style="{
+              top: `${waypoint.y - 4}px`,
+              left: `${waypoint.x - 4}px`,
+            }"
+            class="localization__waypoint"
+          />
+        </div>
+
+        <div
+          v-show="pose.x !== 0 && pose.y !== 0"
+          v-bind:style="robotCss"
+          class="localization__robot"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -37,6 +70,7 @@ export default {
     return {
       context: null,
       pose: { x: 0, y: 0, phi: 0 },
+      waypoints: [],
     };
   },
 
@@ -81,10 +115,25 @@ export default {
   },
 
   methods: {
-    clearCanvas() {
-      const { canvas } = this.$refs;
+    onWaypointsClick(event) {
+      this.waypoints.push({
+        x: event.offsetX,
+        y: event.offsetY,
+      });
+    },
 
-      this.context.clearRect(0, 0, canvas.width, canvas.height);
+    onSendWaypointsClick() {
+      const { scale } = this.selectedArena;
+      const waypoints = this.waypoints.map(({ x, y }) => ({
+        x: (x * 10) / scale,
+        y: (y * 10) / scale,
+      }));
+
+      this.$socket.emit('waypoints', waypoints);
+    },
+
+    onClearWaypointsClick() {
+      this.waypoints = [];
     },
 
     drawArena() {
@@ -114,9 +163,16 @@ export default {
       this.context.stroke();
     },
 
+    clearCanvas() {
+      const { canvas } = this.$refs;
+
+      this.context.clearRect(0, 0, canvas.width, canvas.height);
+    },
+
     reset() {
       this.clearCanvas();
       this.drawArena();
+      this.waypoints = [];
     },
   },
 
@@ -139,14 +195,17 @@ export default {
   bottom: 0;
   left: 0;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+}
+
+.localization__header {
+  display: flex;
+  flex: 0 0 auto;
+  justify-content: space-between;
+  padding: 20px;
 }
 
 .localization__info {
-  position: absolute;
-  top: 10px;
-  left: 10px;
   line-height: 1.2;
 }
 
@@ -154,8 +213,55 @@ export default {
   color: #666;
 }
 
+.localization__clearWaypoints,
+.localization__sendWaypoints {
+  appearance: none;
+  padding: 6px;
+  border: 1px solid;
+  border-radius: 6px;
+  font-size: 11px;
+}
+
+.localization__clearWaypoints {
+  margin: 0 4px 0 0;
+  background: #ffeeba;
+  border-color: #fff3cd;
+}
+
+.localization__sendWaypoints {
+  background: #d4edda;
+  border-color: #c3e6cb;
+}
+
+.localization__canvasContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 auto;
+}
+
 .localization__canvasWrapper {
   position: relative;
+  font-size: 0;
+}
+
+.localization__waypoints {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.localization__waypoint {
+  --size: 8px;
+
+  position: absolute;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  background: rgba(green, .5);
 }
 
 .localization__robot {
