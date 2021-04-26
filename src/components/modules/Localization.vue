@@ -173,6 +173,7 @@ export default {
     reset() {
       this.clearCanvas();
       this.drawArena();
+      this.pose = { x: 0, y: 0, phi: 0 };
       this.waypoints = [];
     },
   },
