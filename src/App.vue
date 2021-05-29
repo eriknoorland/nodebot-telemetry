@@ -1,5 +1,11 @@
 <template>
-  <div id="app">
+  <div
+    id="app"
+    v-bind:class="{
+      'app': true,
+      'app--disconnected': !isConnected,
+    }"
+  >
     <header class="header">
       <navBar />
 
@@ -47,6 +53,7 @@ export default {
   },
 
   computed: {
+    ...mapState('app', ['isConnected']),
     ...mapState('setup', ['selectedArena', 'sensors', 'name']),
   },
 
@@ -66,6 +73,36 @@ export default {
 
 <style lang="scss">
 @import "./scss/base.scss";
+
+.app {
+  &--disconnected {
+    &:before {
+      content: "";
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: rgba(#000, .85);
+      z-index: 1;
+    }
+
+    &:after {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      content: "Disconnected from server";
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      font-size: 20px;
+      color: #fff;
+      z-index: 2;
+    }
+  }
+}
 
 .header__modules {
   display: flex;

@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import EventBus from '@/EventBus';
+import app from './app';
 import battery from './battery';
 import fps from './fps';
 import log from './log';
@@ -20,6 +21,7 @@ export default new Vuex.Store({
   },
 
   modules: {
+    app,
     battery,
     fps,
     log,
