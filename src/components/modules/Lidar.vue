@@ -71,7 +71,7 @@ export default {
 
       this.context.beginPath();
       this.context.moveTo(this.centerX, this.centerY);
-      this.context.lineTo(this.centerX, 10);
+      this.context.lineTo((this.centerX * 2) - 10, this.centerY);
       this.context.stroke();
     },
 
@@ -84,7 +84,7 @@ export default {
         }
 
         const distanceInCm = distance / 10;
-        const angleInRadians = degreesToRadians(parseInt(angle - 90, 10));
+        const angleInRadians = degreesToRadians(parseInt(angle, 10));
         const posX = Math.cos(angleInRadians) * distanceInCm;
         const posY = Math.sin(angleInRadians) * distanceInCm;
 
@@ -94,8 +94,8 @@ export default {
     },
 
     drawLine(angle = 0, color = '#ccc') {
-      const posX = this.centerX + ((this.centerX - 10) * Math.cos(degreesToRadians(angle - 90)));
-      const posY = this.centerY + ((this.centerY - 10) * Math.sin(degreesToRadians(angle - 90)));
+      const posX = this.centerX + ((this.centerX - 10) * Math.cos(degreesToRadians(angle)));
+      const posY = this.centerY + ((this.centerY - 10) * Math.sin(degreesToRadians(angle)));
 
       this.context.lineWidth = 2;
       this.context.strokeStyle = color;
