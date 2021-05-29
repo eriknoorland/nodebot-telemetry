@@ -55,6 +55,11 @@ const keyCodesUsed = [
   'ArrowRight',
   'Numpad0',
   'Space',
+  'KeyY',
+  'KeyU',
+  'KeyI',
+  'KeyO',
+  'KeyP',
 ];
 
 export default {
