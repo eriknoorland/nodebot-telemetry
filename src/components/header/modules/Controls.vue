@@ -36,6 +36,13 @@
       </button>
 
       <button
+        class="controls__button controls__button--reboot"
+        v-on:click="onRebootClick"
+      >
+        Reboot
+      </button>
+
+      <button
         class="controls__button controls__button--shutdown"
         v-on:click="onShutdownClick"
       >
@@ -87,6 +94,10 @@ export default {
     onStopClick() {
       this.$socket.emit('stop');
       this.$store.commit('setup/SET_SELECTED_PROGRAM', {});
+    },
+
+    onRebootClick() {
+      this.$socket.emit('reboot');
     },
 
     onShutdownClick() {
@@ -154,6 +165,12 @@ export default {
     border-color: #ffeeba;
     background: #fff3cd;
     color: #856404;
+  }
+
+  &--reboot {
+    border-color: #f8d7da;
+    background: #facfb2;
+    color: #721c24;
   }
 
   &--shutdown {
