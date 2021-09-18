@@ -29,6 +29,13 @@
       </button>
 
       <button
+        class="controls__button controls__button--restart"
+        v-on:click="onRestartClick"
+      >
+        Restart
+      </button>
+
+      <button
         class="controls__button controls__button--stop"
         v-on:click="onStopClick"
       >
@@ -89,6 +96,11 @@ export default {
       if (!Number.isNaN(this.selectedProgram.id)) {
         this.$socket.emit('start', this.selectedProgram.id);
       }
+    },
+
+    onRestartClick() {
+      this.$socket.emit('restart');
+      this.$store.commit('setup/SET_SELECTED_PROGRAM', {});
     },
 
     onStopClick() {
@@ -159,6 +171,12 @@ export default {
     border-color: #c3e6cb;
     background: #d4edda;
     color: #155724;
+  }
+
+  &--restart {
+    border-color: #ffeeba;
+    background: #fff3cd;
+    color: #856404;
   }
 
   &--stop {
