@@ -4,6 +4,10 @@
       <log />
     </module>
 
+    <module>
+      <emergency-stop />
+    </module>
+
     <module v-if="sensors.includes('poses')">
       <localization />
     </module>
@@ -32,10 +36,12 @@
 <script>
 import { mapState } from 'vuex';
 import Module from '@/components/Module.vue';
+import EmergencyStop from '@/components/modules/EmergencyStop.vue';
 
 export default {
   components: {
     Module,
+    EmergencyStop,
     Log: () => import(/* webpackChunkName: "log" */ '@/components/modules/Log.vue'),
     Lidar: () => import(/* webpackChunkName: "lidar" */ '@/components/modules/Lidar.vue'),
     LineSensor: () => import(/* webpackChunkName: "lineSensor" */ '@/components/modules/LineSensor.vue'),
