@@ -8,12 +8,12 @@ const state = {
       height: 2400,
       scale: 1,
     },
-    {
-      name: 'Home (1800x1200:2)',
-      width: 1800,
-      height: 1200,
-      scale: 2,
-    },
+    // {
+    //   name: 'Home (1800x1200:2)',
+    //   width: 1800,
+    //   height: 1200,
+    //   scale: 2,
+    // },
   ],
   selectedArena: {},
   programs: [],

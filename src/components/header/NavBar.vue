@@ -12,6 +12,15 @@
 
       <li class="navbar__item">
         <router-link
+          to="/arena"
+          class="navbar__link"
+        >
+          Arena
+        </router-link>
+      </li>
+
+      <li class="navbar__item">
+        <router-link
           to="/settings"
           class="navbar__link"
         >
