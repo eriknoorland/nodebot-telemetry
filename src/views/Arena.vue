@@ -8,7 +8,12 @@
   >
     <div class="arena">
       <canvas
-        ref="canvas"
+        ref="poseCanvas"
+        class="arena__canvas"
+      />
+
+      <canvas
+        ref="lidarCanvas"
         class="arena__canvas"
       />
 
@@ -43,7 +48,8 @@ export default {
       scale,
       matrixResolution,
       drawOffset: matrixResolution * scale,
-      context: null,
+      lidarContext: null,
+      poseContext: null,
       pose: null,
     };
   },
@@ -70,8 +76,8 @@ export default {
         const x = pose.x * this.scale;
         const y = pose.y * this.scale;
 
-        this.context.fillStyle = '#000';
-        this.context.fillRect(x, y, 1, 1);
+        this.poseContext.fillStyle = '#ff4000';
+        this.poseContext.fillRect(x, y, 1, 1);
         this.pose = pose;
       });
     },
@@ -82,24 +88,29 @@ export default {
   },
 
   mounted() {
-    const { canvas } = this.$refs;
+    const { lidarCanvas, poseCanvas } = this.$refs;
 
-    this.context = canvas.getContext('2d');
+    this.lidarContext = lidarCanvas.getContext('2d');
+    this.poseContext = poseCanvas.getContext('2d');
 
-    canvas.setAttribute('width', canvas.clientWidth);
-    canvas.setAttribute('height', canvas.clientHeight);
+    lidarCanvas.setAttribute('width', lidarCanvas.clientWidth);
+    lidarCanvas.setAttribute('height', lidarCanvas.clientHeight);
+
+    poseCanvas.setAttribute('width', poseCanvas.clientWidth);
+    poseCanvas.setAttribute('height', poseCanvas.clientHeight);
 
     this.drawArena();
 
     EventBus.$on('reset', () => {
-      this.clearCanvas();
+      this.clearLidarCanvas();
+      this.clearPoseCanvas();
       this.drawArena();
     });
   },
 
   methods: {
     draw(lidarData) {
-      this.clearCanvas();
+      this.clearLidarCanvas();
       this.drawArena();
       this.drawLidarData(lidarData);
     },
@@ -114,18 +125,18 @@ export default {
       const y1 = (height * this.scale) / 2 + this.drawOffset;
       const y2 = (height * this.scale) + this.drawOffset;
 
-      this.context.strokeStyle = '#05f';
-      this.context.beginPath();
-      this.context.moveTo(x1, y0);
-      this.context.lineTo(x2, y0);
-      this.context.lineTo(x2, y1);
-      this.context.lineTo(x3, y1);
-      this.context.lineTo(x3, y2);
-      this.context.lineTo(x0, y2);
-      this.context.lineTo(x0, y1);
-      this.context.lineTo(x1, y1);
-      this.context.lineTo(x1, y0);
-      this.context.stroke();
+      this.lidarContext.strokeStyle = '#05f';
+      this.lidarContext.beginPath();
+      this.lidarContext.moveTo(x1, y0);
+      this.lidarContext.lineTo(x2, y0);
+      this.lidarContext.lineTo(x2, y1);
+      this.lidarContext.lineTo(x3, y1);
+      this.lidarContext.lineTo(x3, y2);
+      this.lidarContext.lineTo(x0, y2);
+      this.lidarContext.lineTo(x0, y1);
+      this.lidarContext.lineTo(x1, y1);
+      this.lidarContext.lineTo(x1, y0);
+      this.lidarContext.stroke();
     },
 
     drawLidarData(data) {
@@ -138,8 +149,8 @@ export default {
           const posX = (Math.cos(phi + angleInRadians) * distance) * this.scale;
           const posY = (Math.sin(phi + angleInRadians) * distance) * this.scale;
 
-          this.context.fillStyle = '#000';
-          this.context.fillRect(
+          this.lidarContext.fillStyle = '#000';
+          this.lidarContext.fillRect(
             (x * this.scale) + posX + this.drawOffset,
             (y * this.scale) + posY + this.drawOffset,
             3,
@@ -149,10 +160,16 @@ export default {
       }
     },
 
-    clearCanvas() {
-      const { canvas } = this.$refs;
+    clearLidarCanvas() {
+      this.clearCanvas(this.$refs.lidarCanvas, this.lidarContext);
+    },
 
-      this.context.clearRect(0, 0, canvas.width, canvas.height);
+    clearPoseCanvas() {
+      this.clearCanvas(this.$refs.poseCanvas, this.poseContext);
+    },
+
+    clearCanvas(canvas, context) {
+      context.clearRect(0, 0, canvas.width, canvas.height);
     },
   },
 };
@@ -161,7 +178,7 @@ export default {
 <style lang="scss" scoped>
   .arenaContainer {
     position: relative;
-    margin: 2px auto;
+    margin: 0 auto;
     padding: calc(var(--resolution) * var(--scale));
     width: calc((3600px + (4 * var(--resolution))) * var(--scale));
     background: #fff;
