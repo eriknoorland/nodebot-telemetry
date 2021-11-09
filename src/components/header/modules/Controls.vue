@@ -23,38 +23,43 @@
     <div class="controls__buttons">
       <button
         class="controls__button controls__button--start"
+        v-bind:disabled="!isReady"
         v-on:click="onStartClick"
       >
         Start
       </button>
 
-      <button
+      <!-- <button
         class="controls__button controls__button--restart"
+        v-bind:disabled="!isReady"
         v-on:click="onRestartClick"
       >
         Restart
-      </button>
+      </button> -->
 
-      <button
+      <!-- <button
         class="controls__button controls__button--stop"
+        v-bind:disabled="!isReady"
         v-on:click="onStopClick"
       >
         Stop
-      </button>
+      </button> -->
 
-      <button
+      <!-- <button
         class="controls__button controls__button--reboot"
+        v-bind:disabled="!isReady"
         v-on:click="onRebootClick"
       >
         Reboot
-      </button>
+      </button> -->
 
-      <button
+      <!-- <button
         class="controls__button controls__button--shutdown"
+        v-bind:disabled="!isReady"
         v-on:click="onShutdownClick"
       >
         Shutdown
-      </button>
+      </button> -->
     </div>
   </div>
 </template>
@@ -69,15 +74,16 @@ const keyCodesUsed = [
   'ArrowRight',
   'Numpad0',
   'Space',
-  'KeyY',
-  'KeyU',
-  'KeyI',
-  'KeyO',
-  'KeyP',
+  'KeyG',
+  'KeyH',
+  'KeyJ',
+  'KeyK',
+  'KeyL',
 ];
 
 export default {
   computed: {
+    ...mapState('app', ['isReady']),
     ...mapState('setup', ['programs', 'selectedProgram']),
 
     program: {
@@ -162,6 +168,10 @@ export default {
   outline: 0;
   cursor: pointer;
   -webkit-appearance: none;
+
+  &:disabled {
+    opacity: 0.5;
+  }
 
   &:last-child {
     margin: 0;

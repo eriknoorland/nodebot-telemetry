@@ -7,7 +7,6 @@ import store from './store';
 
 const socketConnection = SocketIO(process.env.VUE_APP_SOCKETIO_HOST);
 const defaultArena = store.state.setup.arenas[0];
-const selectedArena = window.localStorage.getItem('selected_arena');
 
 Vue.use(new VueSocketIO({
   connection: socketConnection,
@@ -20,7 +19,7 @@ Vue.use(new VueSocketIO({
 
 Vue.config.productionTip = false;
 
-store.commit('setup/SET_SELECTED_ARENA', selectedArena ? JSON.parse(selectedArena) : defaultArena);
+store.commit('setup/SET_SELECTED_ARENA', defaultArena);
 
 new Vue({
   router,

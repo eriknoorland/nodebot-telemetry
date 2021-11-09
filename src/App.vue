@@ -7,8 +7,6 @@
     }"
   >
     <header class="header">
-      <navBar />
-
       <div class="header__modules">
         <header-module>
           <div class="header__logo">
@@ -36,7 +34,6 @@
 
 <script>
 import { mapState } from 'vuex';
-import NavBar from '@/components/header/NavBar.vue';
 import HeaderModule from '@/components/header/Module.vue';
 import Battery from '@/components/header/modules/Battery.vue';
 import FPS from '@/components/header/modules/FPS.vue';
@@ -45,7 +42,6 @@ import EventBus from '@/EventBus';
 
 export default {
   components: {
-    NavBar,
     HeaderModule,
     Battery,
     FPS,

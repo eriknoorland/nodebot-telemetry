@@ -1,35 +1,40 @@
 <template>
-  <div class="modules">
-    <module>
-      <log />
-    </module>
+  <div>
+    <arena v-if="sensors.includes('poses') && sensors.includes('lidar')" />
 
-    <module>
-      <emergency-stop />
-    </module>
+    <div class="modules">
+      <module>
+        <log />
+      </module>
 
-    <module v-if="sensors.includes('poses')">
-      <localization />
-    </module>
+      <module>
+        <emergency-stop />
+      </module>
 
-    <module v-if="sensors.includes('lidar')">
-      <lidar />
-    </module>
+      <module v-if="sensors.includes('poses')">
+        <localization />
+      </module>
 
-    <module v-if="sensors.includes('camera')">
-      <camera />
-    </module>
+      <module v-if="sensors.includes('lidar')">
+        <lidar />
+      </module>
 
-    <module v-if="sensors.includes('line')">
-      <line-sensor />
-    </module>
+      <module v-if="sensors.includes('camera')">
+        <camera />
+      </module>
 
-    <module
-      v-if="sensors.includes('odometry')"
-      modifiers="module--triple"
-    >
-      <odometry />
-    </module>
+      <module v-if="sensors.includes('line')">
+        <line-sensor />
+      </module>
+
+      <module
+        v-if="sensors.includes('odometry')"
+        modifiers="module--triple"
+      >
+        <odometry />
+      </module>
+    </div>
+
   </div>
 </template>
 
@@ -42,6 +47,7 @@ export default {
   components: {
     Module,
     EmergencyStop,
+    Arena: () => import(/* webpackChunkName: "log" */ '@/components/modules/Arena.vue'),
     Log: () => import(/* webpackChunkName: "log" */ '@/components/modules/Log.vue'),
     Lidar: () => import(/* webpackChunkName: "lidar" */ '@/components/modules/Lidar.vue'),
     LineSensor: () => import(/* webpackChunkName: "lineSensor" */ '@/components/modules/LineSensor.vue'),
@@ -62,8 +68,8 @@ export default {
 
   @media(min-width: 768px) {
     display: flex;
-    padding: 0;
     flex-wrap: wrap;
+    padding: 0;
   }
 }
 </style>

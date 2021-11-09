@@ -4,6 +4,8 @@
     v-bind:style="{
       '--scale': scale,
       '--resolution': `${matrixResolution}px`,
+      '--width': `${selectedArena.width}px`,
+      '--height': `${selectedArena.height}px`,
     }"
   >
     <div class="arena">
@@ -178,16 +180,17 @@ export default {
 <style lang="scss" scoped>
   .arenaContainer {
     position: relative;
-    margin: 0 auto;
+    margin: 10px;
     padding: calc(var(--resolution) * var(--scale));
-    width: calc((3600px + (4 * var(--resolution))) * var(--scale));
+    width: calc((var(--width) + (4 * var(--resolution))) * var(--scale));
+    height: calc((var(--height) + (4 * var(--resolution))) * var(--scale));
     background: #fff;
   }
 
   .arena {
     position: relative;
-    width: calc((3600px + (2 * var(--resolution))) * var(--scale));
-    height: calc((2400px + (2 * var(--resolution))) * var(--scale));
+    width: calc((var(--width) + (2 * var(--resolution))) * var(--scale));
+    height: calc((var(--height) + (2 * var(--resolution))) * var(--scale));
     background-size: calc(var(--resolution) * var(--scale)) calc(var(--resolution) * var(--scale));
     background-image:
       linear-gradient(to right, #e1e1e1 1px, transparent 1px),
@@ -224,7 +227,7 @@ export default {
       left: calc((-204px / 2) * var(--scale));
       width: calc(204px * var(--scale));
       height: calc(204px * var(--scale));
-      background: url("../assets/img/robot.png") 0 0;
+      background: url("../../assets/img/robot.png") 0 0;
       background-size: cover;
     }
   }
