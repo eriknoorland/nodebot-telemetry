@@ -1,12 +1,15 @@
 <template>
   <div
     id="app"
-    v-bind:class="{
-      'app': true,
-      'app--disconnected': !isConnected,
-    }"
+    class="app"
   >
     <header class="header">
+      <nav class="header__nav">
+        <router-link v-bind:to="{ name: 'dashboard' }" class="header__navLink">Dashboard</router-link> |
+        <router-link v-bind:to="{ name: 'review' }" class="header__navLink">Review</router-link> |
+        <router-link v-bind:to="{ name: 'line test' }" class="header__navLink">Line Test</router-link>
+      </nav>
+
       <div class="header__modules">
         <header-module>
           <div class="header__logo">
@@ -70,33 +73,21 @@ export default {
 <style lang="scss">
 @import "./scss/base.scss";
 
-.app {
-  &--disconnected {
-    &:before {
-      content: "";
-      position: fixed;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      background: rgba(#000, .85);
-      z-index: 1;
-    }
+.header__nav {
+  display: block;
+  padding: 10px;
+  background: #333;
+  color: #666;
+}
 
-    &:after {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      content: "Disconnected from server";
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      font-size: 20px;
-      color: #fff;
-      z-index: 2;
-    }
+.header__navLink {
+  color: #fff;
+  text-decoration: none;
+  opacity: 0.5;
+
+  &:hover {
+    text-decoration: underline;
+    opacity: 1;
   }
 }
 

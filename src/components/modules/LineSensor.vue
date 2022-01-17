@@ -20,7 +20,7 @@ export default {
   },
 
   computed: {
-    ...mapState('line', ['line']),
+    ...mapState('sensors', ['line']),
   },
 };
 </script>

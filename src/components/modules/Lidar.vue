@@ -1,7 +1,10 @@
 <template>
   <div class="lidar">
-    <canvas ref="canvas" class="lidar__canvas"></canvas>
-    <span class="lidar__heading">{{ heading }}°</span>
+    <canvas ref="canvas" class="lidar__canvas" />
+
+    <span class="lidar__heading">
+      {{ heading }}°
+    </span>
   </div>
 </template>
 
@@ -22,7 +25,7 @@ export default {
   },
 
   computed: {
-    ...mapState('lidar', ['lidar', 'imu']),
+    ...mapState('sensors', ['lidar', 'imu']),
   },
 
   watch: {
@@ -61,15 +64,8 @@ export default {
     drawDistanceCircles() {
       const distanceCircles = [0, 20, 40, 60, 80, 100, 120, 140, 160, 180]; // cm radius
 
-      distanceCircles.forEach((distance) => {
-        this.context.strokeStyle = '#eee';
-        this.context.beginPath();
-        this.context.moveTo(0, this.centerY + distance);
-        this.context.lineTo(this.centerX * 2, this.centerY + distance);
-        this.context.stroke();
-
+      distanceCircles.forEach(distance => {
         this.context.strokeStyle = '#ccc';
-
         this.context.beginPath();
         this.context.arc(this.centerX, this.centerY, distance, 0, 2 * Math.PI);
         this.context.stroke();

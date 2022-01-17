@@ -1,6 +1,6 @@
 <template>
   <div>
-    <arena v-if="sensors.includes('poses') && sensors.includes('lidar')" />
+    <arena v-if="sensors.includes('observations') />
 
     <div class="modules">
       <module>
@@ -11,7 +11,7 @@
         <emergency-stop />
       </module>
 
-      <module v-if="sensors.includes('poses')">
+      <module v-if="sensors.includes('observations')">
         <localization />
       </module>
 
@@ -27,12 +27,12 @@
         <line-sensor />
       </module>
 
-      <module
+      <!-- <module
         v-if="sensors.includes('odometry')"
         modifiers="module--triple"
       >
         <odometry />
-      </module>
+      </module> -->
     </div>
 
   </div>
@@ -53,7 +53,7 @@ export default {
     LineSensor: () => import(/* webpackChunkName: "lineSensor" */ '@/components/modules/LineSensor.vue'),
     Camera: () => import(/* webpackChunkName: "camera" */ '@/components/modules/Camera.vue'),
     Localization: () => import(/* webpackChunkName: "localization" */ '@/components/modules/Localization.vue'),
-    Odometry: () => import(/* webpackChunkName: "odometry" */ '@/components/modules/Odometry.vue'),
+    // Odometry: () => import(/* webpackChunkName: "odometry" */ '@/components/modules/Odometry.vue'),
   },
 
   computed: {

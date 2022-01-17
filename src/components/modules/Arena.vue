@@ -15,23 +15,34 @@
       />
 
       <canvas
-        ref="lidarCanvas"
+        ref="observationsCanvas"
         class="arena__canvas"
       />
 
       <div
-        v-show="pose"
+        v-show="odomPose"
         v-bind:style="robotPoseCSS"
         class="arena__robot"
       />
     </div>
 
     <div
-      v-if="pose"
+      v-if="odomPose || imuPose"
       class="arena__position"
     >
-      {{ pose.x.toFixed(0) }}, {{ pose.y.toFixed(0) }}<br />
-      {{ (pose.phi * (180 / Math.PI)).toFixed(2) }}°
+      <div v-if="odomPose">
+        <span class="arena__positionDash arena__positionDash--odom" /> Odometry<br />
+        {{ odomPose.x.toFixed(0) }}, {{ odomPose.y.toFixed(0) }}<br />
+        {{ (odomPose.phi * (180 / Math.PI)).toFixed(2) }}°
+      </div>
+
+      <br />
+
+      <div v-if="imuPose">
+        <span class="arena__positionDash arena__positionDash--imu" /> IMU<br />
+        {{ imuPose.x.toFixed(0) }}, {{ imuPose.y.toFixed(0) }}<br />
+        {{ (imuPose.phi * (180 / Math.PI)).toFixed(2) }}°
+      </div>
     </div>
   </div>
 </template>
@@ -50,19 +61,19 @@ export default {
       scale,
       matrixResolution,
       drawOffset: matrixResolution * scale,
-      lidarContext: null,
+      observationsContext: null,
       poseContext: null,
-      pose: null,
+      odomPose: null,
+      imuPose: null,
     };
   },
 
   computed: {
     ...mapState('setup', ['selectedArena']),
-    ...mapState('localization', ['poses']),
-    ...mapState('lidar', ['lidar']),
+    ...mapState('sensors', ['imuPoses', 'odomPoses']),
 
     robotPoseCSS() {
-      const { x, y, phi } = this.pose || {};
+      const { x, y, phi } = this.odomPose || {};
 
       return {
         left: `${x * this.scale}px`,
@@ -73,30 +84,29 @@ export default {
   },
 
   watch: {
-    poses(poses) {
+    odomPoses(poses) {
       poses.forEach((pose) => {
-        const x = pose.x * this.scale;
-        const y = pose.y * this.scale;
-
-        this.poseContext.fillStyle = '#ff4000';
-        this.poseContext.fillRect(x, y, 1, 1);
-        this.pose = pose;
+        this.drawPose(pose, '#ff4000');
+        this.odomPose = pose;
       });
     },
 
-    lidar(value) {
-      this.draw(value);
+    odomPoses(poses) {
+      poses.forEach((pose) => {
+        this.drawPose(pose, '#4073ff');
+        this.imuPose = pose;
+      });
     },
   },
 
   mounted() {
-    const { lidarCanvas, poseCanvas } = this.$refs;
+    const { observationsCanvas, poseCanvas } = this.$refs;
 
-    this.lidarContext = lidarCanvas.getContext('2d');
+    this.observationsContext = observationsCanvas.getContext('2d');
     this.poseContext = poseCanvas.getContext('2d');
 
-    lidarCanvas.setAttribute('width', lidarCanvas.clientWidth);
-    lidarCanvas.setAttribute('height', lidarCanvas.clientHeight);
+    observationsCanvas.setAttribute('width', observationsCanvas.clientWidth);
+    observationsCanvas.setAttribute('height', observationsCanvas.clientHeight);
 
     poseCanvas.setAttribute('width', poseCanvas.clientWidth);
     poseCanvas.setAttribute('height', poseCanvas.clientHeight);
@@ -104,17 +114,38 @@ export default {
     this.drawArena();
 
     EventBus.$on('reset', () => {
-      this.clearLidarCanvas();
+      this.observationsCanvas();
       this.clearPoseCanvas();
       this.drawArena();
     });
   },
 
   methods: {
-    draw(lidarData) {
-      this.clearLidarCanvas();
-      this.drawArena();
-      this.drawLidarData(lidarData);
+    drawPose(pose, color) {
+      const x = pose.x * this.scale;
+      const y = pose.y * this.scale;
+
+      this.poseContext.fillStyle = color;
+      this.poseContext.fillRect(x, y, 1, 1);
+    },
+
+    drawObservations(pose) {
+      const { x, y, phi, observations } = pose;
+
+      Object.keys(observations).forEach((angle) => {
+        const distance = observations[angle];
+        const angleInRadians = degreesToRadians(parseInt(angle, 10));
+        const posX = (Math.cos(phi + angleInRadians) * distance) * this.scale;
+        const posY = (Math.sin(phi + angleInRadians) * distance) * this.scale;
+
+        this.observationsContext.fillStyle = '#6accbc';
+        this.observationsContext.fillRect(
+          (x * this.scale) + posX + this.drawOffset,
+          (y * this.scale) + posY + this.drawOffset,
+          2,
+          2,
+        );
+      });
     },
 
     drawArena() {
@@ -127,43 +158,23 @@ export default {
       const y1 = (height * this.scale) / 2 + this.drawOffset;
       const y2 = (height * this.scale) + this.drawOffset;
 
-      this.lidarContext.strokeStyle = '#05f';
-      this.lidarContext.beginPath();
-      this.lidarContext.moveTo(x1, y0);
-      this.lidarContext.lineTo(x2, y0);
-      this.lidarContext.lineTo(x2, y1);
-      this.lidarContext.lineTo(x3, y1);
-      this.lidarContext.lineTo(x3, y2);
-      this.lidarContext.lineTo(x0, y2);
-      this.lidarContext.lineTo(x0, y1);
-      this.lidarContext.lineTo(x1, y1);
-      this.lidarContext.lineTo(x1, y0);
-      this.lidarContext.stroke();
+      this.observationsContext.strokeStyle = '#4073ff';
+      this.observationsContext.lineWidth = 2;
+      this.observationsContext.beginPath();
+      this.observationsContext.moveTo(x1, y0);
+      this.observationsContext.lineTo(x2, y0);
+      this.observationsContext.lineTo(x2, y1);
+      this.observationsContext.lineTo(x3, y1);
+      this.observationsContext.lineTo(x3, y2);
+      this.observationsContext.lineTo(x0, y2);
+      this.observationsContext.lineTo(x0, y1);
+      this.observationsContext.lineTo(x1, y1);
+      this.observationsContext.lineTo(x1, y0);
+      this.observationsContext.stroke();
     },
 
-    drawLidarData(data) {
-      if (this.pose) {
-        const { x, y, phi } = this.pose;
-
-        Object.keys(data).forEach((angle) => {
-          const distance = data[angle];
-          const angleInRadians = degreesToRadians(parseInt(angle, 10));
-          const posX = (Math.cos(phi + angleInRadians) * distance) * this.scale;
-          const posY = (Math.sin(phi + angleInRadians) * distance) * this.scale;
-
-          this.lidarContext.fillStyle = '#000';
-          this.lidarContext.fillRect(
-            (x * this.scale) + posX + this.drawOffset,
-            (y * this.scale) + posY + this.drawOffset,
-            3,
-            3,
-          );
-        });
-      }
-    },
-
-    clearLidarCanvas() {
-      this.clearCanvas(this.$refs.lidarCanvas, this.lidarContext);
+    observationsCanvas() {
+      this.clearCanvas(this.$refs.observationsCanvas, this.observationsContext);
     },
 
     clearPoseCanvas() {
@@ -215,6 +226,21 @@ export default {
     padding: 10px 15px;
     line-height: 1.4;
     background: #fff;
+  }
+
+  .arena__positionDash {
+    display: inline-block;
+    margin: 0 4px 0 0;
+    width: 15px;
+    height: 2px;
+
+    &--odom {
+      background: #ff4000;
+    }
+
+    &--imu {
+      background: #4073ff;
+    }
   }
 
   .arena__robot {
