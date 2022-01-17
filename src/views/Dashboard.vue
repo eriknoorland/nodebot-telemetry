@@ -1,6 +1,6 @@
 <template>
   <div>
-    <arena v-if="sensors.includes('observations') />
+    <arena v-if="sensors.includes('observations')" />
 
     <div class="modules">
       <module>
