@@ -156,7 +156,7 @@ export default {
       try {
         const logFile = await axios.get(`http://localhost:3000/api/v1/logs/${this.selectedLogFile}`);
         this.logFile = JSON.stringify(logFile.data);
-      } catch(error) {
+      } catch (error) {
         //
       }
     },
@@ -218,22 +218,13 @@ export default {
       this.observationsContext.stroke();
     },
 
-    drawObservations(pose) {
-      const { x, y, phi, observations } = pose;
-
-      Object.keys(observations).forEach((angle) => {
-        const distance = observations[angle];
-        const angleInRadians = degreesToRadians(parseInt(angle, 10));
-        const posX = (Math.cos(phi + angleInRadians) * distance) * this.scale;
-        const posY = (Math.sin(phi + angleInRadians) * distance) * this.scale;
+    drawObservations({ observations }) {
+      observations.forEach(observation => {
+        const x = (observation.x * this.scale) + this.drawOffset;
+        const y = (observation.y * this.scale) + this.drawOffset;
 
         this.observationsContext.fillStyle = '#6accbc';
-        this.observationsContext.fillRect(
-          (x * this.scale) + posX + this.drawOffset,
-          (y * this.scale) + posY + this.drawOffset,
-          2,
-          2,
-        );
+        this.observationsContext.fillRect(x, y, 2, 2);
       });
     },
 
