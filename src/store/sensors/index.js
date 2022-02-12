@@ -9,6 +9,7 @@ const state = {
   odomPoses: [],
   odomTicksLeft: 0,
   odomTicksRight: 0,
+  poses: [],
 };
 
 export default {

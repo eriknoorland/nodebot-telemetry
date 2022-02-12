@@ -70,7 +70,7 @@ export default {
 
   computed: {
     ...mapState('setup', ['selectedArena']),
-    ...mapState('sensors', ['imuPoses', 'odomPoses']),
+    ...mapState('sensors', ['poses', 'imuPoses', 'odomPoses']),
 
     robotPoseCSS() {
       const { x, y, phi } = this.odomPose || {};
@@ -84,6 +84,12 @@ export default {
   },
 
   watch: {
+    poses(poses) {
+      poses.forEach((pose) => {
+        this.drawObservations(pose);
+      });
+    },
+
     odomPoses(poses) {
       poses.forEach((pose) => {
         this.drawPose(pose, '#ff4000');
@@ -130,18 +136,13 @@ export default {
     },
 
     drawObservations(pose) {
-      const { x, y, phi, observations } = pose;
+      const { observations } = pose;
 
-      Object.keys(observations).forEach((angle) => {
-        const distance = observations[angle];
-        const angleInRadians = degreesToRadians(parseInt(angle, 10));
-        const posX = (Math.cos(phi + angleInRadians) * distance) * this.scale;
-        const posY = (Math.sin(phi + angleInRadians) * distance) * this.scale;
-
+      observations.forEach(({ x, y }) => {
         this.observationsContext.fillStyle = '#6accbc';
         this.observationsContext.fillRect(
-          (x * this.scale) + posX + this.drawOffset,
-          (y * this.scale) + posY + this.drawOffset,
+          (x * this.scale) + this.drawOffset,
+          (y * this.scale) + this.drawOffset,
           2,
           2,
         );
