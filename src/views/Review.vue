@@ -147,14 +147,14 @@ export default {
 
     this.drawArena();
 
-    const logFiles = await axios.get('http://localhost:3000/api/v1/logs');
+    const logFiles = await axios.get(`${process.env.VUE_APP_API_URL}/v1/logs`);
     this.logFiles = logFiles.data;
   },
 
   methods: {
     async downloadLog() {
       try {
-        const logFile = await axios.get(`http://localhost:3000/api/v1/logs/${this.selectedLogFile}`);
+        const logFile = await axios.get(`${process.env.VUE_APP_API_URL}/v1/logs/${this.selectedLogFile}`);
         this.logFile = JSON.stringify(logFile.data);
       } catch (error) {
         //
