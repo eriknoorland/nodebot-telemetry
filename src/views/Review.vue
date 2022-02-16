@@ -91,7 +91,6 @@
 <script>
 import { mapState } from 'vuex';
 import axios from 'axios';
-import degreesToRadians from '@/utils/degreesToRadians';
 import DoubleRangeSlider from '@/components/DoubleRangeSlider';
 
 const scale = 1 / 3;
@@ -174,12 +173,17 @@ export default {
           this.drawPose(observation.value);
           this.drawObservations(observation.value);
         });
+
+      this.pose = this.observations[max].value;
     },
 
     visualizeLog() {
       const log = JSON.parse(this.logFile);
 
-      this.observations = log.entries.filter(({ type, dataType }) => type === 'data' && dataType === 'observation');
+      this.observations = log.entries
+        .filter(({ type }) => type === 'data')
+        .filter(({ dataType }) => dataType === 'observation');
+
       this.observationsStartIndex = this.observations.length - 1;
 
       this.onSliderIndexChange({ min: 0, max: this.observations.length });
