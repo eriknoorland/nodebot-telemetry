@@ -1,3 +1,1 @@
-const degreesToRadians = angle => (angle * Math.PI) / 180;
-
-export default degreesToRadians;
+export default angle => (angle * Math.PI) / 180;
