@@ -20,7 +20,7 @@
       />
 
       <div
-        v-show="odomPose"
+        v-show="pose"
         v-bind:style="robotPoseCSS"
         class="arena__robot"
       />
@@ -30,18 +30,18 @@
       v-if="odomPose || imuPose"
       class="arena__position"
     >
-      <div v-if="odomPose">
-        <span class="arena__positionDash arena__positionDash--odom" /> Odometry<br />
-        {{ odomPose.x.toFixed(0) }}, {{ odomPose.y.toFixed(0) }}<br />
-        {{ (odomPose.phi * (180 / Math.PI)).toFixed(2) }}°
+      <div v-if="imuPose">
+        <span class="arena__positionDash arena__positionDash--imu" /> IMU<br />
+        {{ imuPose.x.toFixed(0) }}, {{ imuPose.y.toFixed(0) }}<br />
+        {{ rad2deg(imuPose.phi).toFixed(2) }}°
       </div>
 
       <br />
 
-      <div v-if="imuPose">
-        <span class="arena__positionDash arena__positionDash--imu" /> IMU<br />
-        {{ imuPose.x.toFixed(0) }}, {{ imuPose.y.toFixed(0) }}<br />
-        {{ (imuPose.phi * (180 / Math.PI)).toFixed(2) }}°
+      <div v-if="odomPose">
+        <span class="arena__positionDash arena__positionDash--odom" /> Odometry<br />
+        {{ odomPose.x.toFixed(0) }}, {{ odomPose.y.toFixed(0) }}<br />
+        {{ rad2deg(odomPose.phi).toFixed(2) }}°
       </div>
     </div>
   </div>
@@ -50,7 +50,7 @@
 <script>
 import { mapState } from 'vuex';
 import EventBus from '@/EventBus';
-import degreesToRadians from '@/utils/degreesToRadians';
+import radiansToDegrees from '@/utils/radiansToDegrees';
 
 const scale = 1 / 3;
 const matrixResolution = 30;
@@ -63,8 +63,9 @@ export default {
       drawOffset: matrixResolution * scale,
       observationsContext: null,
       poseContext: null,
-      odomPose: null,
+      pose: null,
       imuPose: null,
+      odomPose: null,
     };
   },
 
@@ -73,7 +74,7 @@ export default {
     ...mapState('sensors', ['poses', 'imuPoses', 'odomPoses']),
 
     robotPoseCSS() {
-      const { x, y, phi } = this.odomPose || {};
+      const { x, y, phi } = this.pose || {};
 
       return {
         left: `${x * this.scale}px`,
@@ -87,20 +88,21 @@ export default {
     poses(poses) {
       poses.forEach((pose) => {
         this.drawObservations(pose);
+        this.pose = pose;
       });
     },
 
-    odomPoses(poses) {
+    imuPoses(poses) {
       poses.forEach((pose) => {
         this.drawPose(pose, '#ff4000');
-        this.odomPose = pose;
+        this.imuPose = pose;
       });
     },
 
     odomPoses(poses) {
       poses.forEach((pose) => {
         this.drawPose(pose, '#4073ff');
-        this.imuPose = pose;
+        this.odomPose = pose;
       });
     },
   },
@@ -185,6 +187,10 @@ export default {
     clearCanvas(canvas, context) {
       context.clearRect(0, 0, canvas.width, canvas.height);
     },
+
+    rad2deg(angle) {
+      return radiansToDegrees(angle);
+    },
   },
 };
 </script>
@@ -235,11 +241,11 @@ export default {
     width: 15px;
     height: 2px;
 
-    &--odom {
+    &--imu {
       background: #ff4000;
     }
 
-    &--imu {
+    &--odom {
       background: #4073ff;
     }
   }
