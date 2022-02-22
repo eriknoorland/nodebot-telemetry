@@ -11,6 +11,11 @@
     >
       <div class="arena">
         <canvas
+          ref="arenaCanvas"
+          class="arena__canvas"
+        />
+
+        <canvas
           ref="poseCanvas"
           class="arena__canvas"
         />
@@ -32,7 +37,7 @@
         class="arena__position"
       >
         {{ pose.x.toFixed(0) }}, {{ pose.y.toFixed(0) }}<br />
-        {{ (pose.phi * (180 / Math.PI)).toFixed(2) }}°
+        {{ rad2deg(pose.phi).toFixed(2) }}°
       </div>
     </div>
 
@@ -56,7 +61,7 @@
 
       <button
         class="review__logButton"
-        v-bind:disabled="!selectedLogFile"
+        v-bind:disabled="!selectedLogFile || isDownloading"
         v-on:click="downloadLog"
       >
         Download
@@ -68,7 +73,7 @@
         v-bind:minThreshold="0"
         v-bind:max="observations.length"
         v-bind:maxThreshold="observations.length"
-        v-on:update="onSliderIndexChange"
+        v-on:update="onSliderIndexChangeDebounce"
         class="review__slider"
       />
 
@@ -84,14 +89,24 @@
       >
         Visualize
       </button>
+
+      <button
+        class="review__logButton"
+        v-bind:disabled="!logFile"
+        v-on:click="clear"
+      >
+        Clear
+      </button>
     </div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import { debounce } from 'lodash';
 import axios from 'axios';
 import DoubleRangeSlider from '@/components/DoubleRangeSlider';
+import radiansToDegrees from '@/utils/radiansToDegrees';
 
 const scale = 1 / 3;
 const matrixResolution = 30;
@@ -108,6 +123,8 @@ export default {
       drawOffset: matrixResolution * scale,
       observationsContext: null,
       poseContext: null,
+      arenaContext: null,
+      isDownloading: false,
       logFiles: [],
       selectedLogFile: null,
       logFile: '',
@@ -132,17 +149,29 @@ export default {
     },
   },
 
+  created() {
+    const scope = this;
+
+    this.onSliderIndexChangeDebounce = debounce(({ min, max }) => {
+      scope.onSliderIndexChange({ min, max });
+    }, 100);
+  },
+
   async mounted() {
-    const { observationsCanvas, poseCanvas } = this.$refs;
+    const { observationsCanvas, poseCanvas, arenaCanvas } = this.$refs;
 
     this.observationsContext = observationsCanvas.getContext('2d');
     this.poseContext = poseCanvas.getContext('2d');
+    this.arenaContext = arenaCanvas.getContext('2d');
 
     observationsCanvas.setAttribute('width', observationsCanvas.clientWidth);
     observationsCanvas.setAttribute('height', observationsCanvas.clientHeight);
 
     poseCanvas.setAttribute('width', poseCanvas.clientWidth);
     poseCanvas.setAttribute('height', poseCanvas.clientHeight);
+
+    arenaCanvas.setAttribute('width', arenaCanvas.clientWidth);
+    arenaCanvas.setAttribute('height', arenaCanvas.clientHeight);
 
     this.drawArena();
 
@@ -152,11 +181,16 @@ export default {
 
   methods: {
     async downloadLog() {
+      this.logFile = 'Downloading...';
+      this.isDownloading = true;
+
       try {
         const logFile = await axios.get(`${process.env.VUE_APP_API_URL}/v1/logs/${this.selectedLogFile}`);
         this.logFile = JSON.stringify(logFile.data);
       } catch (error) {
         //
+      } finally {
+        this.isDownloading = false;
       }
     },
 
@@ -165,7 +199,6 @@ export default {
 
       this.clearCanvas(observationsCanvas, this.observationsContext);
       this.clearCanvas(poseCanvas, this.poseContext);
-      this.drawArena();
 
       this.observations
         .filter((observation, index) => index >= min && index <= max)
@@ -174,7 +207,7 @@ export default {
           this.drawObservations(observation.value);
         });
 
-      this.pose = this.observations[max].value;
+      this.pose = this.observations[Math.max(max - 1, 0)].value;
     },
 
     visualizeLog() {
@@ -186,7 +219,7 @@ export default {
 
       this.observationsStartIndex = this.observations.length - 1;
 
-      this.onSliderIndexChange({ min: 0, max: this.observations.length });
+      this.onSliderIndexChange({ min: 0, max: this.observations.length - 1 });
     },
 
     drawPose(pose) {
@@ -207,41 +240,47 @@ export default {
       const y1 = (height * this.scale) / 2 + this.drawOffset;
       const y2 = (height * this.scale) + this.drawOffset;
 
-      this.observationsContext.strokeStyle = '#4073ff';
-      this.observationsContext.lineWidth = 2;
-      this.observationsContext.beginPath();
-      this.observationsContext.moveTo(x1, y0);
-      this.observationsContext.lineTo(x2, y0);
-      this.observationsContext.lineTo(x2, y1);
-      this.observationsContext.lineTo(x3, y1);
-      this.observationsContext.lineTo(x3, y2);
-      this.observationsContext.lineTo(x0, y2);
-      this.observationsContext.lineTo(x0, y1);
-      this.observationsContext.lineTo(x1, y1);
-      this.observationsContext.lineTo(x1, y0);
-      this.observationsContext.stroke();
+      this.arenaContext.strokeStyle = '#4073ff';
+      this.arenaContext.lineWidth = 2;
+      this.arenaContext.beginPath();
+      this.arenaContext.moveTo(x1, y0);
+      this.arenaContext.lineTo(x2, y0);
+      this.arenaContext.lineTo(x2, y1);
+      this.arenaContext.lineTo(x3, y1);
+      this.arenaContext.lineTo(x3, y2);
+      this.arenaContext.lineTo(x0, y2);
+      this.arenaContext.lineTo(x0, y1);
+      this.arenaContext.lineTo(x1, y1);
+      this.arenaContext.lineTo(x1, y0);
+      this.arenaContext.stroke();
     },
 
     drawObservations({ observations }) {
+      this.observationsContext.fillStyle = '#6accbc';
+
       observations.forEach(observation => {
         const x = (observation.x * this.scale) + this.drawOffset;
         const y = (observation.y * this.scale) + this.drawOffset;
 
-        this.observationsContext.fillStyle = '#6accbc';
         this.observationsContext.fillRect(x, y, 2, 2);
       });
     },
 
-    observationsCanvas() {
-      this.clearCanvas(this.$refs.observationsCanvas, this.observationsContext);
-    },
-
-    clearPoseCanvas() {
-      this.clearCanvas(this.$refs.poseCanvas, this.poseContext);
-    },
-
     clearCanvas(canvas, context) {
       context.clearRect(0, 0, canvas.width, canvas.height);
+    },
+
+    clear() {
+      const { observationsCanvas, poseCanvas } = this.$refs;
+
+      this.clearCanvas(observationsCanvas, this.observationsContext);
+      this.clearCanvas(poseCanvas, this.poseContext);
+
+      this.pose = null;
+    },
+
+    rad2deg(angle) {
+      return radiansToDegrees(angle);
     },
   },
 };
