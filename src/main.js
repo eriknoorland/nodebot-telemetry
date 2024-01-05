@@ -5,7 +5,7 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 
-const socketConnection = SocketIO(process.env.VUE_APP_SOCKETIO_HOST);
+const socketConnection = SocketIO(import.meta.env.VITE_SOCKETIO_HOST);
 const defaultArena = store.state.setup.arenas[0];
 
 Vue.use(new VueSocketIO({

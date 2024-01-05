@@ -47,13 +47,13 @@ export default {
   components: {
     Module,
     EmergencyStop,
-    Arena: () => import(/* webpackChunkName: "log" */ '@/components/modules/Arena.vue'),
-    Log: () => import(/* webpackChunkName: "log" */ '@/components/modules/Log.vue'),
-    Lidar: () => import(/* webpackChunkName: "lidar" */ '@/components/modules/Lidar.vue'),
-    LineSensor: () => import(/* webpackChunkName: "lineSensor" */ '@/components/modules/LineSensor.vue'),
-    Camera: () => import(/* webpackChunkName: "camera" */ '@/components/modules/Camera.vue'),
-    Localization: () => import(/* webpackChunkName: "localization" */ '@/components/modules/Localization.vue'),
-    // Odometry: () => import(/* webpackChunkName: "odometry" */ '@/components/modules/Odometry.vue'),
+    Arena: () => import('@/components/modules/Arena.vue'),
+    Log: () => import('@/components/modules/Log.vue'),
+    Lidar: () => import('@/components/modules/Lidar.vue'),
+    LineSensor: () => import('@/components/modules/LineSensor.vue'),
+    Camera: () => import('@/components/modules/Camera.vue'),
+    Localization: () => import('@/components/modules/Localization.vue'),
+    // Odometry: () => import('@/components/modules/Odometry.vue'),
   },
 
   computed: {

@@ -105,8 +105,8 @@
 import { mapState } from 'vuex';
 import { debounce } from 'lodash';
 import axios from 'axios';
-import DoubleRangeSlider from '@/components/DoubleRangeSlider';
-import radiansToDegrees from '@/utils/radiansToDegrees';
+import DoubleRangeSlider from '@/components/DoubleRangeSlider.vue';
+import radiansToDegrees from '@/utils/radiansToDegrees.js';
 
 const scale = 1 / 3;
 const matrixResolution = 30;
@@ -175,8 +175,12 @@ export default {
 
     this.drawArena();
 
-    const logFiles = await axios.get(`${process.env.VUE_APP_API_URL}/v1/logs`);
-    this.logFiles = logFiles.data;
+    try {
+      const logFiles = await axios.get(`${import.meta.env.VITE_API_URL}/v1/logs`);
+      this.logFiles = logFiles.data;
+    } catch (error) {
+      //
+    }
   },
 
   methods: {
@@ -185,7 +189,7 @@ export default {
       this.isDownloading = true;
 
       try {
-        const logFile = await axios.get(`${process.env.VUE_APP_API_URL}/v1/logs/${this.selectedLogFile}`);
+        const logFile = await axios.get(`${import.meta.env.VITE_API_URL}/v1/logs/${this.selectedLogFile}`);
         this.logFile = JSON.stringify(logFile.data);
       } catch (error) {
         //
