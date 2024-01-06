@@ -2,7 +2,7 @@
   <div class="emergencyStop">
     <div
       class="emergencyStop__yellow"
-      v-on:click="handleClick"
+      v-on:click="$emit('onStopClick')"
     >
       <div class="emergencyStop__red">
         <div class="emergencyStop__label">
@@ -14,11 +14,9 @@
 </template>
 
 <script setup>
-import { socket } from '@/socket';
+import { defineEmits } from 'vue';
 
-function handleClick() {
-  socket.emit('emergencyStop');
-};
+defineEmits(['onStopClick']);
 </script>
 
 <style lang="scss" scoped>

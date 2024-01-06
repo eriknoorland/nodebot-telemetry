@@ -25,7 +25,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import LineChart from '@/components/charts/Line';
+import LineChart from '@/components/Line';
 
 const numItems = 50;
 const labels = new Array(numItems).fill('');

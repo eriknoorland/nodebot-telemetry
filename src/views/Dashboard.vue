@@ -1,6 +1,6 @@
 <template>
   <div>
-    <arena v-if="props.setup.sensors.includes('observations')" />
+    <arena v-if="hasObservations" />
 
     <div class="modules">
       <module>
@@ -8,27 +8,27 @@
       </module>
 
       <module>
-        <EmergencyStop />
+        <EmergencyStop v-on:onStopClick="handleEmegencyStopClick" />
       </module>
 
-      <module v-if="props.setup.sensors.includes('observations')">
+      <module v-if="hasObservations">
         <Localization v-bind:data="data"  />
       </module>
 
-      <module v-if="props.setup.sensors.includes('lidar')">
+      <module v-if="hasLidar">
         <Lidar v-bind:data="data"  />
       </module>
 
-      <module v-if="props.setup.sensors.includes('camera')">
+      <module v-if="hasCamera">
         <Camera v-bind:data="data"  />
       </module>
 
-      <module v-if="props.setup.sensors.includes('line')">
+      <module v-if="hasLine">
         <LineSensor v-bind:data="data" />
       </module>
 
       <!-- <module
-        v-if="setupData.sensors.includes('odometry')"
+        v-if="hasOdometry"
         modifiers="module--triple"
       >
         <Odometry />
@@ -40,17 +40,27 @@
 
 <script setup>
 import { defineProps } from 'vue';
+import { socket } from '@/socket';
 import Module from '@/components/Module.vue';
-import EmergencyStop from '@/components/modules/EmergencyStop.vue';
-import Arena from'@/components/modules/Arena.vue';
-import Log from'@/components/modules/Log.vue';
-import Lidar from'@/components/modules/Lidar.vue';
-import LineSensor from'@/components/modules/LineSensor.vue';
-import Camera from'@/components/modules/Camera.vue';
-import Localization from'@/components/modules/Localization.vue';
-// import Odometry from'@/components/modules/Odometry.vue';
+import EmergencyStop from '@/components/EmergencyStop.vue';
+import Arena from'@/components/Arena.vue';
+import Log from'@/components/Log.vue';
+import Lidar from'@/components/Lidar.vue';
+import LineSensor from'@/components/LineSensor.vue';
+import Camera from'@/components/Camera.vue';
+import Localization from'@/components/Localization.vue';
+// import Odometry from'@/components/Odometry.vue';
 
 const props = defineProps(['log', 'setup', 'data']);
+const hasObservations = props.setup.sensors.includes('observations');
+const hasLidar = props.setup.sensors.includes('lidar');
+const hasCamera = props.setup.sensors.includes('camera');
+const hasLine = props.setup.sensors.includes('line');
+// const hasOdometry = props.setup.sensors.includes('odometry');
+
+function handleEmegencyStopClick() {
+  socket.emit('emergencyStop');
+}
 </script>
 
 <style lang="scss" scoped>
