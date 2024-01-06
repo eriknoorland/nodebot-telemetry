@@ -260,7 +260,7 @@ export default {
       left: calc((-204px / 2) * var(--scale));
       width: calc(204px * var(--scale));
       height: calc(204px * var(--scale));
-      background: url("../../assets/img/robot.png") 0 0;
+      background: url("../assets/img/robot.png") 0 0;
       background-size: cover;
     }
   }

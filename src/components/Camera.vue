@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import map from '../../utils/map';
+import map from '@/utils/map';
 
 export default {
   data() {
