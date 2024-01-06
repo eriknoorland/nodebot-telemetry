@@ -53,10 +53,10 @@
 <script setup>
 import { ref } from 'vue';
 import { socket } from '@/socket';
-import HeaderModule from '@/components/header/Module.vue';
-import Battery from '@/components/header/modules/Battery.vue';
-import FPS from '@/components/header/modules/FPS.vue';
-import Controls from '@/components/header/modules/Controls.vue';
+import HeaderModule from '@/components/HeaderModule.vue';
+import Battery from '@/components/Battery.vue';
+import FPS from '@/components/FPS.vue';
+import Controls from '@/components/Controls.vue';
 import '@/scss/base.scss';
 
 const isReady = ref(false);

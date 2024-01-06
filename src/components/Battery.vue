@@ -14,7 +14,15 @@
     </div>
 
     <span>
-      {{ percentage }}% / {{ voltage }}V
+      <span data-testid="percentage">
+        {{ percentage }}%
+      </span>
+
+      /
+
+      <span data-testid="voltage">
+        {{ voltage }}V
+      </span>
     </span>
   </div>
 </template>
