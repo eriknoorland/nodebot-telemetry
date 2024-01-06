@@ -50,7 +50,7 @@
 <script>
 import { mapState } from 'vuex';
 import EventBus from '@/EventBus';
-import radiansToDegrees from '@/utils/radiansToDegrees';
+import rad2Deg from '@/utils/rad2Deg';
 
 const scale = 1 / 3;
 const matrixResolution = 30;
@@ -121,7 +121,7 @@ export default {
 
     this.drawArena();
 
-    EventBus.$on('reset', () => {
+    EventBus.on('reset', () => {
       this.observationsCanvas();
       this.clearPoseCanvas();
       this.drawArena();
@@ -189,7 +189,7 @@ export default {
     },
 
     rad2deg(angle) {
-      return radiansToDegrees(angle);
+      return rad2Deg(angle);
     },
   },
 };

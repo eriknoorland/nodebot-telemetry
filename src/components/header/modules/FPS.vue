@@ -1,18 +1,11 @@
 <template>
-  <div
-    v-if="fps.actual"
-    class="fps"
-  >
-    FPS {{ fps.actual.toFixed(0) }} / {{ fps.target }}
+  <div class="fps">
+    FPS {{ props.data.actual.toFixed(0) }} / {{ props.data.target }}
   </div>
 </template>
 
-<script>
-import { mapState } from 'vuex';
+<script setup>
+import { defineProps } from 'vue';
 
-export default {
-  computed: {
-    ...mapState('sensors', ['fps']),
-  },
-};
+const props = defineProps(['data']);
 </script>

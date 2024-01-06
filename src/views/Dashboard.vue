@@ -1,65 +1,56 @@
 <template>
   <div>
-    <arena v-if="sensors.includes('observations')" />
+    <arena v-if="props.setup.sensors.includes('observations')" />
 
     <div class="modules">
       <module>
-        <log />
+        <Log v-bind:data="log"  />
       </module>
 
       <module>
-        <emergency-stop />
+        <EmergencyStop />
       </module>
 
-      <module v-if="sensors.includes('observations')">
-        <localization />
+      <module v-if="props.setup.sensors.includes('observations')">
+        <Localization v-bind:data="data"  />
       </module>
 
-      <module v-if="sensors.includes('lidar')">
-        <lidar />
+      <module v-if="props.setup.sensors.includes('lidar')">
+        <Lidar v-bind:data="data"  />
       </module>
 
-      <module v-if="sensors.includes('camera')">
-        <camera />
+      <module v-if="props.setup.sensors.includes('camera')">
+        <Camera v-bind:data="data"  />
       </module>
 
-      <module v-if="sensors.includes('line')">
-        <line-sensor />
+      <module v-if="props.setup.sensors.includes('line')">
+        <LineSensor v-bind:data="data" />
       </module>
 
       <!-- <module
-        v-if="sensors.includes('odometry')"
+        v-if="setupData.sensors.includes('odometry')"
         modifiers="module--triple"
       >
-        <odometry />
+        <Odometry />
       </module> -->
     </div>
 
   </div>
 </template>
 
-<script>
-import { mapState } from 'vuex';
+<script setup>
+import { defineProps } from 'vue';
 import Module from '@/components/Module.vue';
 import EmergencyStop from '@/components/modules/EmergencyStop.vue';
+import Arena from'@/components/modules/Arena.vue';
+import Log from'@/components/modules/Log.vue';
+import Lidar from'@/components/modules/Lidar.vue';
+import LineSensor from'@/components/modules/LineSensor.vue';
+import Camera from'@/components/modules/Camera.vue';
+import Localization from'@/components/modules/Localization.vue';
+// import Odometry from'@/components/modules/Odometry.vue';
 
-export default {
-  components: {
-    Module,
-    EmergencyStop,
-    Arena: () => import('@/components/modules/Arena.vue'),
-    Log: () => import('@/components/modules/Log.vue'),
-    Lidar: () => import('@/components/modules/Lidar.vue'),
-    LineSensor: () => import('@/components/modules/LineSensor.vue'),
-    Camera: () => import('@/components/modules/Camera.vue'),
-    Localization: () => import('@/components/modules/Localization.vue'),
-    // Odometry: () => import('@/components/modules/Odometry.vue'),
-  },
-
-  computed: {
-    ...mapState('setup', ['sensors']),
-  },
-};
+const props = defineProps(['log', 'setup', 'data']);
 </script>
 
 <style lang="scss" scoped>

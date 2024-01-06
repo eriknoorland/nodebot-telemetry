@@ -106,7 +106,7 @@ import { mapState } from 'vuex';
 import { debounce } from 'lodash';
 import axios from 'axios';
 import DoubleRangeSlider from '@/components/DoubleRangeSlider.vue';
-import radiansToDegrees from '@/utils/radiansToDegrees.js';
+import rad2Deg from '@/utils/rad2Deg.js';
 
 const scale = 1 / 3;
 const matrixResolution = 30;
@@ -284,7 +284,7 @@ export default {
     },
 
     rad2deg(angle) {
-      return radiansToDegrees(angle);
+      return rad2Deg(angle);
     },
   },
 };

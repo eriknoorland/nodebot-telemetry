@@ -1,6 +1,5 @@
 const mutations = {
-  SOCKET_data(state, { fps, imu, lidar, line, odomPoses, imuPoses, poses }) {
-    state.fps = fps;
+  SOCKET_data(state, { imu, lidar, line, odomPoses, imuPoses, poses }) {
     state.imu = imu;
     state.imuPoses = imuPoses;
     state.line = line;

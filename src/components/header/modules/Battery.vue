@@ -2,57 +2,60 @@
   <div class="battery">
     <div class="batteryStatus">
       <div
-        ref="indicatorBar"
-        class="batteryStatus__indicator"
-        v-bind:class="{ '_is_too_low': isBatteryLow }"
-        v-bind:style="{ width: `${percentage}%` }"
+        v-bind:class="{
+          'batteryStatus__indicator': true,
+          'batteryStatus__indicator--low': isBatteryLow,
+          'batteryStatus__indicator--noData': !hasBatteryData,
+        }"
+        v-bind:style="{
+          width: `${percentage}%`,
+        }"
       />
     </div>
 
-    <span>{{ percentage }}% / {{ voltage | decimalize }}V</span>
+    <span>
+      {{ percentage }}% / {{ voltage }}V
+    </span>
   </div>
 </template>
 
-<script>
-import { mapState } from 'vuex';
+<script setup>
+import { defineProps, computed } from 'vue';
 
-export default {
-  computed: {
-    ...mapState('battery', [
-      'minVoltage',
-      'minThresholdVoltage',
-      'maxVoltage',
-      'numCells',
-      'voltage',
-    ]),
+const props = defineProps(['data']);
+const battery = props.data || { voltage: 0, numCells: 0 };
+const hasBatteryData = !!props.data;
+const minVoltage = 3.2;
+const minThresholdVoltage = 3.6;
+const maxVoltage = 4.2;
 
-    min() {
-      return this.minVoltage * this.numCells;
-    },
+const min = computed(() => {
+  return minVoltage * battery.numCells;
+});
 
-    max() {
-      return this.maxVoltage * this.numCells;
-    },
+const max = computed(() => {
+  return maxVoltage * battery.numCells;
+});
 
-    percentage() {
-      if (!this.voltage || this.voltage < this.min) {
-        return 0;
-      }
+const percentage = computed(() => {
+  if (!battery.voltage || battery.voltage < min.value) {
+    return 0;
+  }
+  
+  return Math.floor(((battery.voltage - min.value) * 100) / (max.value - min.value));
+});
 
-      return Math.floor(((this.voltage - this.min) * 100) / (this.max - this.min));
-    },
+const voltage = computed(() => {
+  if (!hasBatteryData) {
+    return battery.voltage;
+  }
 
-    isBatteryLow() {
-      return this.voltage < (this.minThresholdVoltage * this.numCells);
-    },
-  },
+  return battery.voltage.toFixed(2);
+});
 
-  filters: {
-    decimalize(value) {
-      return value.toFixed(2);
-    },
-  },
-};
+const isBatteryLow = computed(() => {
+  return battery.voltage < (minThresholdVoltage * battery.numCells);
+});
 </script>
 
 <style lang="scss" scoped>
@@ -61,7 +64,7 @@ export default {
 }
 
 .batteryStatus {
-  margin: 0 4px 0 0;
+  margin: 0 8px 0 0;
   padding: 2px;
   width: 24px;
   height: 12px;
@@ -73,9 +76,15 @@ export default {
   width: 0;
   height: 100%;
   background: #c3e6cb;
-}
 
-.batteryStatus__indicator._is_too_low {
-  background: #f8d7da;
+  &--low {
+    background: #f8d7da;
+  }
+
+  &--noData {
+    background: #303030;
+    width: 100% !important;
+    opacity: 0.2;
+  }
 }
 </style>

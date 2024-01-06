@@ -64,6 +64,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import { socket } from '@/socket';
 import EventBus from '@/EventBus';
 
 export default {
@@ -130,7 +131,7 @@ export default {
         y: (y * 10) / scale,
       }));
 
-      this.$socket.emit('waypoints', waypoints);
+      socket.emit('waypoints', waypoints);
     },
 
     onClearWaypointsClick() {
@@ -184,7 +185,7 @@ export default {
     this.context = canvas.getContext('2d');
     this.drawArena();
 
-    EventBus.$on('reset', this.reset);
+    EventBus.on('reset', this.reset);
   },
 };
 </script>

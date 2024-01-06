@@ -2,7 +2,7 @@
   <div class="emergencyStop">
     <div
       class="emergencyStop__yellow"
-      v-on:click="onClick"
+      v-on:click="handleClick"
     >
       <div class="emergencyStop__red">
         <div class="emergencyStop__label">
@@ -13,13 +13,11 @@
   </div>
 </template>
 
-<script>
-export default {
-  methods: {
-    onClick() {
-      this.$socket.emit('emergencyStop');
-    },
-  },
+<script setup>
+import { socket } from '@/socket';
+
+function handleClick() {
+  socket.emit('emergencyStop');
 };
 </script>
 

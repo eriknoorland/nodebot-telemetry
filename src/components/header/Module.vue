@@ -1,21 +1,15 @@
 <template>
-  <div
-    class="header__module"
-    v-bind:class="modifiers"
-  >
+  <div v-bind:class="classNames">
     <slot />
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    modifiers: {
-      type: String,
-      default: '',
-    },
-  },
-};
+<script setup>
+import { defineProps } from 'vue';
+import modifiers from '@/utils/modifiers';
+
+const props = defineProps(['modifiers']);
+const classNames = modifiers('header__module', props.modifiers);
 </script>
 
 <style scoped lang="scss">

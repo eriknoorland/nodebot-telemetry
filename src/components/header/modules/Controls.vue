@@ -2,10 +2,10 @@
   <div class="controls">
     <select
       class="controls__select"
-      v-model="program"
+      v-model="selectedProgram"
     >
       <option
-        v-bind:value="{}"
+        v-bind:value="null"
         disabled
       >
         -- Select program --
@@ -24,8 +24,8 @@
     <div class="controls__buttons">
       <button
         class="controls__button controls__button--start"
-        v-bind:disabled="!isReady"
-        v-on:click="onStartClick"
+        v-bind:disabled="!isReady || !selectedProgram"
+        v-on:click="$emit('onStartClick', selectedProgram.id)"
       >
         Start
       </button>
@@ -33,7 +33,7 @@
       <button
         class="controls__button controls__button--stop"
         v-bind:disabled="!isReady"
-        v-on:click="onStopClick"
+        v-on:click="$emit('onStopClick')"
       >
         Stop
       </button>
@@ -41,9 +41,14 @@
   </div>
 </template>
 
-<script>
-import { mapState } from 'vuex';
+<script setup>
+import { defineProps, defineModel, onMounted } from 'vue';
+import { socket } from '@/socket';
 
+defineEmits(['onStartClick', 'onStopClick']);
+
+const props = defineProps(['isReady', 'programs']);
+const selectedProgram = defineModel();
 const keyCodesUsed = [
   'ArrowUp',
   'ArrowLeft',
@@ -58,52 +63,27 @@ const keyCodesUsed = [
   'KeyL',
 ];
 
-export default {
-  computed: {
-    ...mapState('app', ['isReady']),
-    ...mapState('setup', ['programs', 'selectedProgram']),
+const programs = props.programs.map((program, index) => ({
+  id: index,
+  ...program,
+}));
 
-    program: {
-      get() {
-        return this.selectedProgram;
-      },
+function handleKeyUpDown(event) {
+  const { type, code } = event;
 
-      set(value) {
-        this.$store.commit('setup/SET_SELECTED_PROGRAM', value);
-      },
-    },
-  },
+  if (keyCodesUsed.includes(code)) {
+    event.preventDefault();
 
-  methods: {
-    onStartClick() {
-      if (!Number.isNaN(this.selectedProgram.id)) {
-        this.$socket.emit('start', this.selectedProgram.id);
-      }
-    },
-
-    onStopClick() {
-      this.$socket.emit('stop');
-      this.$store.commit('setup/SET_SELECTED_PROGRAM', {});
-    },
-
-    onKey(event) {
-      const { type, code } = event;
-
-      if (keyCodesUsed.includes(code)) {
-        event.preventDefault();
-
-        if (type === 'keyup') {
-          this.$socket.emit(code);
-        }
-      }
-    },
-  },
-
-  mounted() {
-    document.addEventListener('keydown', this.onKey);
-    document.addEventListener('keyup', this.onKey);
-  },
+    if (type === 'keyup') {
+      socket.emit(code);
+    }
+  }
 };
+
+onMounted(() => {
+  document.addEventListener('keydown', handleKeyUpDown);
+  document.addEventListener('keyup', handleKeyUpDown);
+});
 </script>
 
 <style lang="scss" scoped>

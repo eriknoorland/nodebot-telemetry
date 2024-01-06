@@ -11,7 +11,7 @@
 <script>
 import { mapState } from 'vuex';
 import EventBus from '@/EventBus';
-import degreesToRadians from '@/utils/degreesToRadians';
+import deg2Rad from '@/utils/deg2Rad';
 
 export default {
   data() {
@@ -86,7 +86,7 @@ export default {
         }
 
         const distanceInCm = distance / 10;
-        const angleInRadians = degreesToRadians(parseInt(angle, 10));
+        const angleInRadians = deg2Rad(parseInt(angle, 10));
         const posX = Math.cos(angleInRadians) * distanceInCm;
         const posY = Math.sin(angleInRadians) * distanceInCm;
 
@@ -96,8 +96,8 @@ export default {
     },
 
     drawLine(angle = 0, color = '#ccc') {
-      const posX = this.centerX + ((this.centerX - 10) * Math.cos(degreesToRadians(angle)));
-      const posY = this.centerY + ((this.centerY - 10) * Math.sin(degreesToRadians(angle)));
+      const posX = this.centerX + ((this.centerX - 10) * Math.cos(deg2Rad(angle)));
+      const posY = this.centerY + ((this.centerY - 10) * Math.sin(deg2Rad(angle)));
 
       this.context.lineWidth = 2;
       this.context.strokeStyle = color;
@@ -119,7 +119,7 @@ export default {
     this.centerX = canvas.width * 0.5;
     this.centerY = canvas.height * 0.5;
 
-    EventBus.$on('reset', this.clearCanvas);
+    EventBus.on('reset', this.clearCanvas);
   },
 };
 </script>

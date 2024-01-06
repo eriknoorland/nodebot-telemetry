@@ -5,12 +5,7 @@ const mutations = {
 
   SOCKET_disconnect(state) {
     state.isConnected = false;
-    state.isReady = false;
   },
-
-  SOCKET_ready(state) {
-    state.isReady = true;
-  }
 };
 
 export default mutations;

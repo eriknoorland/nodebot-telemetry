@@ -5,14 +5,11 @@
   />
 </template>
 
-<script>
-import { mapState } from 'vuex';
+<script setup>
+import { defineProps } from 'vue';
 
-export default {
-  computed: {
-    ...mapState('log', ['log']),
-  },
-};
+const props = defineProps(['data']);
+const log = props.data || '';
 </script>
 
 <style lang="scss" scoped>

@@ -1,27 +1,26 @@
 <template>
   <div class="lineSensor">
     <div
-      v-for="(sensor, index) in line"
+      v-for="(value, index) in lines"
       v-bind:key="index"
-      v-bind:style="{ height: `${(sensor * 100) / resolution}%` }"
+      v-bind:style="{
+        height: `${calculateLineHeight(value)}%`,
+      }"
       class="lineSensor__bar"
     />
   </div>
 </template>
 
-<script>
-import { mapState } from 'vuex';
+<script setup>
+import { defineProps } from 'vue';
 
-export default {
-  data() {
-    return {
-      resolution: 2048,
-    };
-  },
+const props = defineProps(['data']);
+const lines = data.line;
 
-  computed: {
-    ...mapState('sensors', ['line']),
-  },
+function calculateLineHeight(value) {
+  const resolution = 2048;
+  
+  return (value * 100) / resolution;
 };
 </script>
 

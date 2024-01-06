@@ -1,7 +1,6 @@
 import mutations from './mutations';
 
 const state = {
-  fps: {},
   imuPoses: [],
   imu: {},
   line: [],

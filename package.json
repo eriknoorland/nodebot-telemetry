@@ -8,22 +8,21 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "@vitejs/plugin-vue": "^5.0.2",
     "axios": "^1.6.4",
     "chart.js": "^2.9.3",
     "lodash": "^4.17.21",
+    "mitt": "^3.0.1",
     "socket.io-client": "^4.7.3",
-    "vue": "^2.7.16",
+    "vue": "^3",
     "vue-chartjs": "^3.5.1",
-    "vue-router": "^3.6.5",
-    "vue-socket.io": "^3.0.10",
-    "vuex": "^3.6.2"
+    "vue-router": "^4",
+    "vuex": "^4"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^1.6.1",
+    "@vue/compiler-sfc": "^3",
     "sass": "^1.69.5",
-    "vite": "^2.5.4",
-    "vite-plugin-vue2": "1.9.0",
-    "vue-template-compiler": "^2.7.16"
+    "vite": "^5.0.11"
   },
   "browserslist": [
     "> 1%",
